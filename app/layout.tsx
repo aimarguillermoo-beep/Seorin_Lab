@@ -6,8 +6,8 @@ export const metadata: Metadata = {
   description:
     "Catálogo de skincare: SKIN1004, CELIMAX y MEDICUBE. Armá tu carrito y enviá el pedido por WhatsApp.",
   icons: {
-    icon: "/favicon.svg",
-    shortcut: "/favicon.svg",
+    icon: "/icon.png",
+    shortcut: "/icon.png",
   },
 };
 
