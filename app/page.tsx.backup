@@ -104,17 +104,16 @@ export default function Home() {
   const [need, setNeed] = useState("");
   const [brand, setBrand] = useState("");
   const [type, setType] = useState("");
+  const [stock, setStock] = useState("");
 
-  const filtered = useMemo(() => {
-    let result = catalogProducts.filter((p) => {
-      if (need && !needFor(p).includes(need)) return false;
-      if (brand && p.brand !== brand) return false;
-      if (type && typeFor(p) !== type) return false;
-      return true;
-    });
-    result.sort((a, b) => (a.soldOut === b.soldOut ? 0 : a.soldOut ? 1 : -1));
-    return result;
-  }, [need, brand, type]);
+  const filtered = useMemo(() => catalogProducts.filter((p) => {
+    if (need && !needFor(p).includes(need)) return false;
+    if (brand && p.brand !== brand) return false;
+    if (type && typeFor(p) !== type) return false;
+    if (stock === "Disponible" && p.soldOut) return false;
+    if (stock === "Sin stock" && !p.soldOut) return false;
+    return true;
+  }), [need, brand, type, stock]);
 
   const cartEntries = Object.entries(cart).map(([name, quantity]) => ({ product: getProduct(name), quantity })).filter((x) => x.product && x.quantity > 0);
   const cartCount = cartEntries.reduce((sum, x) => sum + x.quantity, 0);
@@ -148,7 +147,7 @@ export default function Home() {
 
       <section className="current-needs" id="segun-tu-piel">
         <p className="kicker">Empezá por tu piel</p><h2>¿Qué querés tratar?</h2><p>Elegí una necesidad y descubrí las opciones disponibles.</p>
-        <div className="need-grid">{["Acné, poros y textura","Manchas y tono desigual","Piel seca y deshidratada","Barrera sensible","Líneas de expresión y firmeza","Luminosidad","Protección solar"].map((x) => <button key={x} onClick={() => { setNeed(x); document.getElementById("productos")?.scrollIntoView({ behavior: "smooth" }); }}>{x}</button>)}</div>
+        <div className="need-grid">{["Acné, poros y textura","Manchas y tono desigual","Piel seca y deshidratada","Barrera sensible","Líneas de expresión y firmeza","Luminosidad","Protección solar"].map((x) => <button key={x} onClick={() => { setNeed(x); document.getElementById("productos")?.scrollIntoView(); }}>{x}</button>)}</div>
       </section>
 
       <section className="featured-section">
@@ -156,6 +155,12 @@ export default function Home() {
         <div className="featured-grid">{featuredProducts.map((p) => <ProductCard key={p.name} product={p} onAdd={() => addToCart(p)} />)}</div>
       </section>
 
+      <section className="advisor-section"><p className="kicker">Te acompañamos a elegir</p><h2>¿No sabés qué elegir?</h2><p>Contanos qué querés tratar y te ayudamos a encontrar los productos indicados para tu piel.</p><a className="primary-button" href={whatsappLink("Hola Seorin Lab. Quiero asesoramiento para elegir productos según mi piel.")} target="_blank" rel="noreferrer">Quiero asesoramiento</a></section>
+
+      <section className="payment-shipping" id="envios-pagos">
+        <div><p className="kicker">Todos los medios de pago</p><h2>Elegí cómo pagar.</h2><p>Transferencia, débito y crédito.</p><p>Consultá por 3 y 6 cuotas.</p></div>
+        <div><p className="kicker">Envíos a todo el país</p><h2>Coordinamos tu envío.</h2><p>Consultanos con tu localidad y código postal para conocer la modalidad, el costo y el plazo de entrega.</p><a className="text-link" href={whatsappLink("Hola Seorin Lab. Quiero consultar el envío a mi localidad.")} target="_blank" rel="noreferrer">Consultar mi envío ↗</a></div>
+      </section>
       <div className="purchase-flow">Elegí tus productos → Agregalos al pedido → Confirmá pago y envío por WhatsApp.</div>
 
       <section className="current-catalog" id="productos">
@@ -163,18 +168,12 @@ export default function Home() {
         <div className="filters">
           <label>Necesidad<select value={need} onChange={(e) => setNeed(e.target.value)}><option value="">Todas</option>{["Acné, poros y textura","Manchas y tono desigual","Piel seca y deshidratada","Barrera sensible","Líneas de expresión y firmeza","Luminosidad","Protección solar"].map((x) => <option key={x}>{x}</option>)}</select></label>
           <label>Marca<select value={brand} onChange={(e) => setBrand(e.target.value)}><option value="">Todas</option><option>MEDICUBE</option><option>SKIN1004</option><option>CELIMAX</option></select></label>
-          <label><span className="hidden sm:inline">Tipo de producto</span><span className="sm:hidden">Tipo</span><select value={type} onChange={(e) => setType(e.target.value)}><option value="">Todos</option>{["Limpiador","Sérum / Ampoule","Crema hidratante","Pads","Mascarilla","Protector solar","Kit / Rutina"].map((x) => <option key={x}>{x}</option>)}</select></label>
+          <label>Tipo de producto<select value={type} onChange={(e) => setType(e.target.value)}><option value="">Todos</option>{["Limpiador","Sérum / Ampoule","Crema hidratante","Pads","Mascarilla","Protector solar","Kit / Rutina"].map((x) => <option key={x}>{x}</option>)}</select></label>
+          <label>Stock<select value={stock} onChange={(e) => setStock(e.target.value)}><option value="">Todo</option><option>Disponible</option><option>Sin stock</option></select></label>
         </div>
         <div className="product-count">{filtered.length} productos</div>
         <div className="current-catalog-grid">{filtered.map((p) => <ProductCard key={p.name} product={p} onAdd={() => addToCart(p)} />)}</div>
         <div className="catalog-help"><a href={whatsappLink("Hola Seorin Lab. Necesito ayuda para elegir.")} target="_blank" rel="noreferrer">¿Necesitás ayuda para elegir?</a></div>
-      </section>
-
-      <section className="advisor-section"><p className="kicker">Te acompañamos a elegir</p><h2>¿No sabés qué elegir?</h2><p>Contanos qué querés tratar y te ayudamos a encontrar los productos indicados para tu piel.</p><a className="primary-button" href={whatsappLink("Hola Seorin Lab. Quiero asesoramiento para elegir productos según mi piel.")} target="_blank" rel="noreferrer">Quiero asesoramiento</a></section>
-
-      <section className="payment-shipping" id="envios-pagos">
-        <div><p className="kicker">Todos los medios de pago</p><h2>Elegí cómo pagar.</h2><p>Transferencia, débito y crédito.</p><p>Consultá por 3 y 6 cuotas.</p></div>
-        <div><p className="kicker">Envíos a todo el país</p><h2>Coordinamos tu envío.</h2><p>Consultanos con tu localidad y código postal para conocer la modalidad, el costo y el plazo de entrega.</p><a className="text-link" href={whatsappLink("Hola Seorin Lab. Quiero consultar el envío a mi localidad.")} target="_blank" rel="noreferrer">Consultar mi envío ↗</a></div>
       </section>
 
       <footer><div className="footer-brand"><div className="wordmark"><img className="brand-logo" src="/seorin-lab-emblem.webp" alt=""/><span>SEORIN LAB</span></div><p>Skincare original. Piel luminosa y saludable, con una rutina que tenga sentido para vos.</p></div><div className="footer-links"><div><span>WhatsApp</span><a href="https://wa.me/5491125578250" target="_blank" rel="noreferrer">+54 9 11 2557-8250</a></div><div><span>Instagram</span><a href="https://instagram.com/seorinlab.skincare" target="_blank" rel="noreferrer">@seorinlab.skincare</a></div><div><span>Email</span><a href="mailto:seorin_lab@outlook.com">seorin_lab@outlook.com</a></div></div><p className="legal">Las descripciones se refieren a beneficios cosméticos y no sustituyen diagnóstico ni tratamiento dermatológico. Precios expresados en pesos argentinos.</p></footer>
