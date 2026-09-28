@@ -603,7 +603,7 @@ footer { display: grid; grid-template-columns: 1.2fr .8fr; gap: 70px; padding: 7
     padding-bottom: 8px; /* Room for scrollbar */
   }
   .featured-grid .current-product-card { 
-    flex: 0 0 82%; 
+    flex: 0 0 43%; 
     scroll-snap-align: start; 
   }
   .current-catalog-grid { gap: 10px; }
