@@ -260,9 +260,9 @@ export default function Home() {
       <section className="current-catalog" id="productos">
         <div className="catalog-intro"><p className="kicker">Tu rutina, a tu manera</p><h2>Encontrá tu próximo esencial.</h2></div>
         <div className="filters">
+          <label><span className="hidden sm:inline">Tipo de producto</span><span className="sm:hidden">Tipo</span><select value={type} onChange={(e) => setType(e.target.value)}><option value="">Todos</option>{["Limpiador","Sérum / Ampoule","Crema hidratante","Pads","Mascarilla","Protector solar","Kit / Rutina","Contorno de ojos","Tónico","Tratamiento / Booster"].map((x) => <option key={x}>{x}</option>)}</select></label>
           <label>Necesidad<select value={need} onChange={(e) => setNeed(e.target.value)}><option value="">Todas</option>{["Acné, poros y textura","Manchas y tono desigual","Piel seca y deshidratada","Barrera sensible","Líneas de expresión y firmeza","Luminosidad","Protección solar"].map((x) => <option key={x}>{x}</option>)}</select></label>
           <label>Marca<select value={brand} onChange={(e) => setBrand(e.target.value)}><option value="">Todas</option><option>MEDICUBE</option><option>SKIN1004</option><option>CELIMAX</option><option>BEAUTY OF JOSEON</option><option>DR. ALTHEA</option><option>ANUA</option></select></label>
-          <label><span className="hidden sm:inline">Tipo de producto</span><span className="sm:hidden">Tipo</span><select value={type} onChange={(e) => setType(e.target.value)}><option value="">Todos</option>{["Limpiador","Sérum / Ampoule","Crema hidratante","Pads","Mascarilla","Protector solar","Kit / Rutina","Contorno de ojos","Tónico","Tratamiento / Booster"].map((x) => <option key={x}>{x}</option>)}</select></label>
         </div>
         <div className="product-count">{filtered.length} productos</div>
         <div className="current-catalog-grid">{filtered.map((p) => <ProductCard key={p.name} product={p} onAdd={() => addToCart(p)} />)}</div>
