@@ -51,24 +51,24 @@ const needMap: Record<string, string[]> = {
   "Madagascar Centella Watergel Sheet Ampoule Mask": ["Piel seca y deshidratada", "Barrera sensible"],
   "Madagascar Centella Tone Brightening Capsule Ampoule": ["Manchas y tono desigual", "Luminosidad"],
   "Madagascar Centella Light Cleansing Oil": [],
-  "Pore + Dark Spot Brightening Pad": ["Manchas y tono desigual", "Luminosidad", "Acné, poros y textura"],
+  "Pore + Dark Spot Brightening Pad": ["Manchas y tono desigual", "Luminosidad", "Acnéé, poros y textura"],
   "The Real Noni Starter Kit": ["Piel seca y deshidratada", "Barrera sensible"],
-  "The Vita A Retinol Shot Tightening Serum": ["Líneas de expresión y firmeza", "Acné, poros y textura"],
+  "The Vita A Retinol Shot Tightening Serum": ["Líneas de expresión y firmeza", "Acnéé, poros y textura"],
   "Dual Barrier Skin Wearable Cream": ["Barrera sensible", "Piel seca y deshidratada"],
-  "One Day Exosome Shot Pore Serum 2000": ["Acné, poros y textura"],
+  "One Day Exosome Shot Pore Serum 2000": ["Acnéé, poros y textura"],
   "Collagen Night Wrapping Mask": ["Piel seca y deshidratada", "Líneas de expresión y firmeza", "Luminosidad"],
   "Triple Collagen Serum 4.0": ["Piel seca y deshidratada", "Líneas de expresión y firmeza", "Luminosidad"],
   "Deep Vita C Pad": ["Manchas y tono desigual", "Luminosidad"],
-  "Zero Pore Pad 2.0": ["Acné, poros y textura"],
+  "Zero Pore Pad 2.0": ["Acnéé, poros y textura"],
   "Collagen Niacinamide Jelly Cream": ["Piel seca y deshidratada", "Luminosidad", "Líneas de expresión y firmeza"],
-  "Madagascar Centella Poremizing Deep Cleansing Foam": ["Acné, poros y textura"],
+  "Madagascar Centella Poremizing Deep Cleansing Foam": ["Acnéé, poros y textura"],
   "Madagascar Centella Ampoule Foam": ["Piel seca y deshidratada", "Barrera sensible"],
   "Daily Tinted Fluid Sunscreen SPF 40 LP110": ["Protección solar", "Manchas y tono desigual"],
   "345 Relief Cream": ["Barrera sensible", "Piel seca y deshidratada", "Manchas y tono desigual"],
-  "The Vita-A Retinal Shot Tightening Booster": ["Líneas de expresión y firmeza", "Acné, poros y textura"],
+  "The Vita-A Retinal Shot Tightening Booster": ["Líneas de expresión y firmeza", "Acnéé, poros y textura"],
   "Revive Eye Serum: Ginseng + Retinal": ["Líneas de expresión y firmeza", "Piel seca y deshidratada", "Luminosidad"],
-  "Azelaic Acid 10 Hyaluron Redness Soothing Serum": ["Acné, poros y textura", "Manchas y tono desigual", "Barrera sensible"],
-  "Madagascar Centella Toning Toner": ["Acné, poros y textura", "Luminosidad"]
+  "Azelaic Acid 10 Hyaluron Redness Soothing Serum": ["Acnéé, poros y textura", "Manchas y tono desigual", "Barrera sensible"],
+  "Madagascar Centella Toning Toner": ["Acnéé, poros y textura", "Luminosidad"]
 };
 const needFor = (p: Product) => needMap[p.name] || [];
 
@@ -180,7 +180,7 @@ export default function Home() {
 
       <section className="current-needs" id="segun-tu-piel">
         <p className="kicker">Empezá por tu piel</p><h2>¿Qué querés tratar?</h2><p>Elegí una necesidad y descubrí las opciones disponibles.</p>
-        <div className="need-grid">{["Acné, poros y textura","Manchas y tono desigual","Piel seca y deshidratada","Barrera sensible","Líneas de expresión y firmeza","Luminosidad","Protección solar"].map((x) => <button key={x} onClick={() => { setNeed(x); document.getElementById("productos")?.scrollIntoView({ behavior: "smooth" }); }}>{x}</button>)}</div>
+        <div className="need-grid">{["Acnéé, poros y textura","Manchas y tono desigual","Piel seca y deshidratada","Barrera sensible","Líneas de expresión y firmeza","Luminosidad","Protección solar"].map((x) => <button key={x} onClick={() => { setNeed(x); document.getElementById("productos")?.scrollIntoView({ behavior: "smooth" }); }}>{x}</button>)}</div>
       </section>
 
       <section className="featured-section">
@@ -192,7 +192,7 @@ export default function Home() {
       <section className="current-catalog" id="productos">
         <div className="catalog-intro"><p className="kicker">Tu rutina, a tu manera</p><h2>Encontrá tu próximo esencial.</h2></div>
         <div className="filters">
-          <label>Necesidad<select value={need} onChange={(e) => setNeed(e.target.value)}><option value="">Todas</option>{["Acné, poros y textura","Manchas y tono desigual","Piel seca y deshidratada","Barrera sensible","Líneas de expresión y firmeza","Luminosidad","Protección solar"].map((x) => <option key={x}>{x}</option>)}</select></label>
+          <label>Necesidad<select value={need} onChange={(e) => setNeed(e.target.value)}><option value="">Todas</option>{["Acnéé, poros y textura","Manchas y tono desigual","Piel seca y deshidratada","Barrera sensible","Líneas de expresión y firmeza","Luminosidad","Protección solar"].map((x) => <option key={x}>{x}</option>)}</select></label>
           <label>Marca<select value={brand} onChange={(e) => setBrand(e.target.value)}><option value="">Todas</option><option>MEDICUBE</option><option>SKIN1004</option><option>CELIMAX</option><option>BEAUTY OF JOSEON</option><option>DR. ALTHEA</option><option>ANUA</option></select></label>
           <label><span className="hidden sm:inline">Tipo de producto</span><span className="sm:hidden">Tipo</span><select value={type} onChange={(e) => setType(e.target.value)}><option value="">Todos</option>{["Limpiador","Sérum / Ampoule","Crema hidratante","Pads","Mascarilla","Protector solar","Kit / Rutina","Contorno de ojos","Tónico","Tratamiento / Booster"].map((x) => <option key={x}>{x}</option>)}</select></label>
         </div>
