@@ -75,17 +75,25 @@ const typeMap: Record<string, string> = {
 const typeFor = (p: Product) => typeMap[p.name] || "Otros";
 
 function ProductCard({ product, onAdd }: { product: Product; onAdd: () => void }) {
+  const cuota = product.price / 3;
+  const transfer = product.price * 0.85;
   return (
     <article className="current-product-card">
       <div className="current-product-image-wrap">
-        {product.soldOut && <span className="stock-badge">SIN STOCK</span>}
+        {product.soldOut ? <span className="stock-badge">SIN STOCK</span> : product.preorder ? <span className="stock-badge preorder">PREVENTA</span> : null}
         <img src={product.image} alt={`${product.name} de ${product.brand}`} loading="eager" decoding="async" onError={(e) => loadImageFallback(e.currentTarget, originalProductImage(product.image))} />
       </div>
       <div className="current-product-copy">
         <div className="current-product-meta"><span>{product.brand}</span><span>{product.size}</span></div>
         <h3>{product.name}</h3>
-        <p className="current-product-tags">{product.eyebrow.replace(/ · /g, " · ")}</p>
-        <div className="current-product-price"><strong>{formatPrice(product.price)}</strong><span>{product.soldOut ? "Sin stock" : "Disponible"}</span></div>
+        <p className="current-product-tags">{product.eyebrow}</p>
+        
+        <div className="current-product-price-block">
+          <strong className="price-list">{formatPrice(product.price)}</strong>
+          <span className="price-cuotas">3 cuotas sin interés de {formatPrice(cuota)}</span>
+          <span className="price-transfer">15% OFF por transferencia <strong>{formatPrice(transfer)}</strong></span>
+        </div>
+
         <details className="current-product-details">
           <summary>Ver producto</summary>
           <p>{product.description}</p>
