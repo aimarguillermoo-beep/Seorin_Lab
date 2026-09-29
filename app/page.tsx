@@ -125,9 +125,14 @@ function ProductCard({ product, onAdd }: { product: Product; onAdd: () => void }
         <p className="current-product-tags">{product.eyebrow}</p>
         
         <div className="current-product-price-block">
-          <strong className="price-list">{formatPrice(product.price)}</strong>
-          <span className="price-cuotas">3 cuotas sin interés de {formatPrice(cuota)}</span>
-          <span className="price-transfer">15% OFF por transferencia <strong>{formatPrice(transfer)}</strong></span>
+          <div className="price-secondary-group">
+            <span className="price-list">{formatPrice(product.price)}</span>
+            <span className="price-cuotas">3 cuotas sin interés de {formatPrice(cuota)}</span>
+          </div>
+          <div className="price-transfer-group">
+            <span className="transfer-badge">15% OFF por transferencia</span>
+            <strong className="transfer-price">{formatPrice(transfer)}</strong>
+          </div>
         </div>
 
         <details className="current-product-details">
