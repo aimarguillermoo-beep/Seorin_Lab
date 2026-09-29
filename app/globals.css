@@ -655,8 +655,7 @@ footer { display: grid; grid-template-columns: 1.2fr .8fr; gap: 70px; padding: 7
     margin-top: 16px;
     font-size: 13px; 
   }
-  .purchase-flow { padding: 4px 16px; font-size: 10px; letter-spacing: .02em; line-height: 1.35; max-width: 100%; white-space: nowrap; overflow-x: auto; }
-  .purchase-flow::-webkit-scrollbar { display: none; }
+  .purchase-flow { padding: 4px 6px; font-size: 8.5px; letter-spacing: 0; line-height: 1.35; max-width: 100%; white-space: nowrap; overflow: hidden; text-align: center; }
 
   /* === CATALOG FILTERS === */
   .catalog-intro { margin-bottom: 20px; }
