@@ -156,7 +156,6 @@ export default function Home() {
         <div className="featured-grid">{featuredProducts.map((p) => <ProductCard key={p.name} product={p} onAdd={() => addToCart(p)} />)}</div>
       </section>
 
-      <div className="purchase-flow">Elegí tus productos → Agregalos al pedido → Confirmá pago y envío por WhatsApp.</div>
 
       <section className="current-catalog" id="productos">
         <div className="catalog-intro"><p className="kicker">Tu rutina, a tu manera</p><h2>Encontrá tu próximo esencial.</h2></div>
