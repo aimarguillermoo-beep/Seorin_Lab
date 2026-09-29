@@ -25,6 +25,14 @@ const catalogNames = [
   "Madagascar Centella Tone Brightening Capsule Ampoule",
   "Madagascar Centella Light Cleansing Oil",
   "Collagen Niacinamide Jelly Cream",
+  "Madagascar Centella Poremizing Deep Cleansing Foam",
+  "Madagascar Centella Ampoule Foam",
+  "Daily Tinted Fluid Sunscreen SPF 40 LP110",
+  "345 Relief Cream",
+  "The Vita-A Retinal Shot Tightening Booster",
+  "Revive Eye Serum: Ginseng + Retinal",
+  "Azelaic Acid 10 Hyaluron Redness Soothing Serum",
+  "Madagascar Centella Toning Toner"
 ];
 
 const featuredNames = [
@@ -53,6 +61,14 @@ const needMap: Record<string, string[]> = {
   "Deep Vita C Pad": ["Manchas y tono desigual", "Luminosidad"],
   "Zero Pore Pad 2.0": ["Acné, poros y textura"],
   "Collagen Niacinamide Jelly Cream": ["Piel seca y deshidratada", "Luminosidad", "Líneas de expresión y firmeza"],
+  "Madagascar Centella Poremizing Deep Cleansing Foam": ["Acné, poros y textura"],
+  "Madagascar Centella Ampoule Foam": ["Piel seca y deshidratada", "Barrera sensible"],
+  "Daily Tinted Fluid Sunscreen SPF 40 LP110": ["Protección solar", "Manchas y tono desigual"],
+  "345 Relief Cream": ["Barrera sensible", "Piel seca y deshidratada", "Manchas y tono desigual"],
+  "The Vita-A Retinal Shot Tightening Booster": ["Líneas de expresión y firmeza", "Acné, poros y textura"],
+  "Revive Eye Serum: Ginseng + Retinal": ["Líneas de expresión y firmeza", "Piel seca y deshidratada", "Luminosidad"],
+  "Azelaic Acid 10 Hyaluron Redness Soothing Serum": ["Acné, poros y textura", "Manchas y tono desigual", "Barrera sensible"],
+  "Madagascar Centella Toning Toner": ["Acné, poros y textura", "Luminosidad"]
 };
 const needFor = (p: Product) => needMap[p.name] || [];
 
@@ -71,6 +87,14 @@ const typeMap: Record<string, string> = {
   "Deep Vita C Pad": "Pads",
   "Zero Pore Pad 2.0": "Pads",
   "Collagen Niacinamide Jelly Cream": "Crema hidratante",
+  "Madagascar Centella Poremizing Deep Cleansing Foam": "Limpiador",
+  "Madagascar Centella Ampoule Foam": "Limpiador",
+  "Daily Tinted Fluid Sunscreen SPF 40 LP110": "Protector solar",
+  "345 Relief Cream": "Crema hidratante",
+  "The Vita-A Retinal Shot Tightening Booster": "Tratamiento / Booster",
+  "Revive Eye Serum: Ginseng + Retinal": "Contorno de ojos",
+  "Azelaic Acid 10 Hyaluron Redness Soothing Serum": "Sérum / Ampoule",
+  "Madagascar Centella Toning Toner": "Tónico"
 };
 const typeFor = (p: Product) => typeMap[p.name] || "Otros";
 
@@ -129,7 +153,7 @@ export default function Home() {
   const cartTotal = cartEntries.reduce((sum, x) => sum + x.product.price * x.quantity, 0);
   const addToCart = (p: Product) => { if (p.soldOut) return; setCart((c) => ({ ...c, [p.name]: (c[p.name] || 0) + 1 })); setCartOpen(true); };
   const setQuantity = (name: string, q: number) => setCart((c) => { const n = { ...c }; if (q <= 0) delete n[name]; else n[name] = q; return n; });
-  const orderLink = whatsappLink(["Hola Seorin Lab. Quiero hacer este pedido:", "", ...cartEntries.map(({product, quantity}) => •  x  —  c/u) => `• ${quantity} x ${product.name} — ${formatPrice(product.price)} c/u`), "", `Total base: ${formatPrice(cartTotal)}`, "¿Me confirmás stock, pago y envío?"].join("\n"));
+  const orderLink = whatsappLink(["Hola Seorin Lab. Quiero hacer este pedido:", "", ...cartEntries.map(({product, quantity}) => `\u2022 ${quantity} x ${product.name}${product.preorder ? " (PREVENTA)" : ""} \u2014 ${formatPrice(product.price)} c/u`), "", `Total base: ${formatPrice(cartTotal)}`, "¿Me confirmás stock, pago y envío?"].join("\n"));
 
   return (
     <main>
