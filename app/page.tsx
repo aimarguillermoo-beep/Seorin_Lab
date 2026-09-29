@@ -40,10 +40,10 @@ const catalogNames = [
 ];
 
 const featuredNames = [
-  "Zero Pore Pad 2.0",
-  "Pore + Dark Spot Brightening Pad",
-  "Dual Barrier Skin Wearable Cream",
-  "Hyalu-Cica Water-Fit Sun Serum SPF50+ PA++++",
+  "Azelaic Acid 10 Hyaluron Redness Soothing Serum",
+  "The Vita-A Retinal Shot Tightening Booster",
+  "345 Relief Cream",
+  "One Day Exosome Shot Pore Serum 2000",
 ];
 
 const getProduct = (name: string) => products.find((p) => p.name === name)!;
