@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { products, type Product } from "./products";
 
 const whatsappNumber = "5491125578250";
@@ -112,38 +113,88 @@ const typeFor = (p: Product) => typeMap[p.name] || "Otros";
 
 function ProductCard({ product, onAdd }: { product: Product; onAdd: () => void }) {
   const cuota = product.price / 3;
-  const transfer = product.price * 0.85;
+  const transfer = product.transfer || Math.round(product.price / 1.15);
   return (
-    <article className="current-product-card">
-      <div className="current-product-image-wrap">
-        {product.soldOut ? <span className="stock-badge">SIN STOCK</span> : product.preorder ? <span className="stock-badge preorder">PREVENTA</span> : null}
-        <img src={product.image} alt={`${product.name} de ${product.brand}`} loading="eager" decoding="async" onError={(e) => loadImageFallback(e.currentTarget, originalProductImage(product.image))} />
-      </div>
-      <div className="current-product-copy">
-        <div className="current-product-meta"><span>{product.brand}</span><span>{product.size}</span></div>
-        <h3>{product.name}</h3>
-        <p className="current-product-tags">{product.eyebrow}</p>
-        
-        <div className="current-product-price-block">
-          <div className="price-secondary-group">
-            <span className="price-list">{formatPrice(product.price)}</span>
-            <span className="price-cuotas">3 cuotas sin interés de {formatPrice(cuota)}</span>
+    <Dialog>
+      <article className="current-product-card">
+        <DialogTrigger asChild>
+          <div className="current-product-image-wrap cursor-pointer group">
+            {product.soldOut ? <span className="stock-badge">SIN STOCK</span> : product.preorder ? <span className="stock-badge preorder">PREVENTA</span> : null}
+            <img src={product.image} alt={`${product.name} de ${product.brand}`} loading="eager" decoding="async" onError={(e) => loadImageFallback(e.currentTarget, originalProductImage(product.image))} className="transition-transform group-hover:scale-105 duration-500" />
           </div>
-          <div className="price-transfer-group">
-            <span className="transfer-badge">15% OFF por transferencia</span>
-            <strong className="transfer-price">{formatPrice(transfer)}</strong>
+        </DialogTrigger>
+        <div className="current-product-copy">
+          <div className="current-product-meta"><span>{product.brand}</span><span>{product.size}</span></div>
+          <h3>{product.name}</h3>
+          <p className="current-product-tags">{product.eyebrow}</p>
+          
+          <div className="current-product-price-block">
+            <div className="price-secondary-group">
+              <span className="price-list">{formatPrice(product.price)}</span>
+              <span className="price-cuotas">3 cuotas sin interés de {formatPrice(cuota)}</span>
+            </div>
+            <div className="price-transfer-group">
+              <span className="transfer-badge">Precio transferencia</span>
+              <strong className="transfer-price">{formatPrice(transfer)}</strong>
+            </div>
+          </div>
+
+          <DialogTrigger asChild>
+            <button className="current-product-details text-left cursor-pointer w-full bg-transparent border-0 p-0 m-[14px_0] border-y border-[var(--line)]" type="button">
+              <div className="py-[15px] text-[11px] font-[750] tracking-[.05em] flex items-center gap-2 text-[var(--ink)]">
+                <span className="text-[14px] leading-none">▸</span> Ver producto
+              </div>
+            </button>
+          </DialogTrigger>
+
+          <button className="current-buy-button" type="button" onClick={onAdd} disabled={product.soldOut}>{product.soldOut ? "Sin stock" : "Agregar al pedido"}</button>
+        </div>
+      </article>
+
+      <DialogContent className="product-modal-content" showCloseButton={false}>
+        <DialogClose className="product-modal-close" aria-label="Cerrar">✕</DialogClose>
+        <div className="product-modal-grid">
+          {/* Image */}
+          <div className="product-modal-image" style={{ "--accent": product.accent } as React.CSSProperties}>
+            {product.soldOut ? <span className="stock-badge">SIN STOCK</span> : product.preorder ? <span className="stock-badge preorder">PREVENTA</span> : null}
+            <img src={product.image} alt={product.name} />
+          </div>
+
+          {/* Info */}
+          <div className="product-modal-info">
+            <div className="product-modal-info-scroll">
+              <DialogHeader className="product-modal-header">
+                <DialogDescription className="product-modal-brand">{product.brand} · {product.size}</DialogDescription>
+                <DialogTitle className="product-modal-title">{product.name}</DialogTitle>
+                <p className="product-modal-eyebrow">{product.eyebrow}</p>
+              </DialogHeader>
+
+              <div className="product-modal-body">
+                <p>{product.description}</p>
+                <p><strong>Ideal para:</strong> {product.skin}</p>
+                <p><strong>Modo de uso:</strong> {product.use}</p>
+              </div>
+            </div>
+
+            <div className="product-modal-footer">
+              <div className="product-modal-prices">
+                <div>
+                  <span className="product-modal-price-label">Transferencia</span>
+                  <span className="product-modal-price-value">{formatPrice(transfer)}</span>
+                </div>
+                <div>
+                  <span className="product-modal-price-label">Tarjeta</span>
+                  <span className="product-modal-price-card">{formatPrice(product.price)}</span>
+                </div>
+              </div>
+              <button className="current-buy-button" type="button" onClick={onAdd} disabled={product.soldOut}>
+                {product.soldOut ? "Sin stock" : "Agregar al pedido"}
+              </button>
+            </div>
           </div>
         </div>
-
-        <details className="current-product-details">
-          <summary>Ver producto</summary>
-          <p>{product.description}</p>
-          <p><strong>Ideal para:</strong> {product.skin}</p>
-          <p><strong>Modo de uso:</strong> {product.use}</p>
-        </details>
-        <button className="current-buy-button" type="button" onClick={onAdd} disabled={product.soldOut}>{product.soldOut ? "Sin stock" : "Agregar al pedido"}</button>
-      </div>
-    </article>
+      </DialogContent>
+    </Dialog>
   );
 }
 
