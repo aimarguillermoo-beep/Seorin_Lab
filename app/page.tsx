@@ -32,7 +32,11 @@ const catalogNames = [
   "The Vita-A Retinal Shot Tightening Booster",
   "Revive Eye Serum: Ginseng + Retinal",
   "Azelaic Acid 10 Hyaluron Redness Soothing Serum",
-  "Madagascar Centella Toning Toner"
+  "Madagascar Centella Toning Toner",
+  "TXA Niacinamide 15% Serum",
+  "Vitamin C Boosting Serum",
+  "Madagascar Centella Probio-Cica Bakuchiol Eye Cream",
+  "PDRN Pink Collagen Capsule Cream",
 ];
 
 const featuredNames = [
@@ -68,7 +72,11 @@ const needMap: Record<string, string[]> = {
   "The Vita-A Retinal Shot Tightening Booster": ["Líneas de expresión y firmeza", "Acné, poros y textura"],
   "Revive Eye Serum: Ginseng + Retinal": ["Líneas de expresión y firmeza", "Piel seca y deshidratada", "Luminosidad"],
   "Azelaic Acid 10 Hyaluron Redness Soothing Serum": ["Acné, poros y textura", "Manchas y tono desigual", "Barrera sensible"],
-  "Madagascar Centella Toning Toner": ["Acné, poros y textura", "Luminosidad"]
+  "Madagascar Centella Toning Toner": ["Acné, poros y textura", "Luminosidad"],
+  "TXA Niacinamide 15% Serum": ["Manchas y tono desigual","Luminosidad"],
+  "Vitamin C Boosting Serum": ["Manchas y tono desigual","Luminosidad"],
+  "Madagascar Centella Probio-Cica Bakuchiol Eye Cream": ["Líneas de expresión y firmeza","Piel seca y deshidratada"],
+  "PDRN Pink Collagen Capsule Cream": ["Piel seca y deshidratada","Luminosidad","Líneas de expresión y firmeza"],
 };
 const needFor = (p: Product) => needMap[p.name] || [];
 
@@ -94,7 +102,11 @@ const typeMap: Record<string, string> = {
   "The Vita-A Retinal Shot Tightening Booster": "Tratamiento / Booster",
   "Revive Eye Serum: Ginseng + Retinal": "Contorno de ojos",
   "Azelaic Acid 10 Hyaluron Redness Soothing Serum": "Sérum / Ampoule",
-  "Madagascar Centella Toning Toner": "Tónico"
+  "Madagascar Centella Toning Toner": "Tónico",
+  "TXA Niacinamide 15% Serum": "Sérum / Ampoule",
+  "Vitamin C Boosting Serum": "Sérum / Ampoule",
+  "Madagascar Centella Probio-Cica Bakuchiol Eye Cream": "Contorno de ojos",
+  "PDRN Pink Collagen Capsule Cream": "Crema",
 };
 const typeFor = (p: Product) => typeMap[p.name] || "Otros";
 
