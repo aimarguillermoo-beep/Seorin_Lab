@@ -977,10 +977,23 @@ footer { display: grid; grid-template-columns: 1.2fr .8fr; gap: 70px; padding: 7
     overflow: hidden;
   }
   .product-modal-image {
-    min-height: 240px;
+    min-height: 0;
+    max-height: 45vh;
     border-right: 0;
     border-bottom: 1px solid var(--line);
     flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+  }
+  .product-modal-image img {
+    position: static;
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: calc(45vh - 32px);
+    object-fit: contain;
   }
   .product-modal-info {
     display: flex;
