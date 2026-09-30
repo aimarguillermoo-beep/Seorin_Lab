@@ -1050,3 +1050,10 @@ footer { display: grid; grid-template-columns: 1.2fr .8fr; gap: 70px; padding: 7
   }
 }
 
+
+/* 15% OFF tag - subtle, editorial style */
+.off-tag {
+  font-weight: 800;
+  letter-spacing: .08em;
+  color: #416751;
+}

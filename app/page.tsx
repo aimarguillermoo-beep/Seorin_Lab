@@ -37,6 +37,12 @@ const catalogNames = [
   "Vitamin C Boosting Serum",
   "Madagascar Centella Probio-Cica Bakuchiol Eye Cream",
   "PDRN Pink Collagen Capsule Cream",
+  "Dúo Doble Limpieza",
+  "Dúo Glass Skin",
+  "Dúo Anti-Age",
+  "Dúo Poros & Textura",
+  "Dúo Calm & Clear",
+  "Dúo Brightening",
 ];
 
 const featuredNames = [
@@ -76,6 +82,12 @@ const needMap: Record<string, string[]> = {
   "Vitamin C Boosting Serum": ["Manchas y tono desigual","Luminosidad"],
   "Madagascar Centella Probio-Cica Bakuchiol Eye Cream": ["Líneas de expresión y firmeza","Piel seca y deshidratada"],
   "PDRN Pink Collagen Capsule Cream": ["Piel seca y deshidratada","Luminosidad","Líneas de expresión y firmeza"],
+  "Dúo Doble Limpieza": [],
+  "Dúo Glass Skin": ["Piel seca y deshidratada", "Luminosidad", "Líneas de expresión y firmeza"],
+  "Dúo Anti-Age": ["Líneas de expresión y firmeza", "Acné, poros y textura"],
+  "Dúo Poros & Textura": ["Acné, poros y textura"],
+  "Dúo Calm & Clear": ["Acné, poros y textura", "Manchas y tono desigual", "Barrera sensible"],
+  "Dúo Brightening": ["Manchas y tono desigual", "Luminosidad"],
 };
 const needFor = (p: Product) => needMap[p.name] || [];
 
@@ -105,6 +117,12 @@ const typeMap: Record<string, string> = {
   "Vitamin C Boosting Serum": "Sérum / Ampoule",
   "Madagascar Centella Probio-Cica Bakuchiol Eye Cream": "Contorno de ojos",
   "PDRN Pink Collagen Capsule Cream": "Crema",
+  "Dúo Doble Limpieza": "Kit / Rutina",
+  "Dúo Glass Skin": "Kit / Rutina",
+  "Dúo Anti-Age": "Kit / Rutina",
+  "Dúo Poros & Textura": "Kit / Rutina",
+  "Dúo Calm & Clear": "Kit / Rutina",
+  "Dúo Brightening": "Kit / Rutina",
 };
 const typeFor = (p: Product) => typeMap[p.name] || "Otros";
 
@@ -131,7 +149,7 @@ function ProductCard({ product, onAdd }: { product: Product; onAdd: () => void }
               <span className="price-cuotas">3 cuotas sin interés de {formatPrice(cuota)}</span>
             </div>
             <div className="price-transfer-group">
-              <span className="transfer-badge">Precio transferencia</span>
+              <span className="transfer-badge">Transferencia · <span className="off-tag">15% off</span></span>
               <strong className="transfer-price">{formatPrice(transfer)}</strong>
             </div>
           </div>
@@ -176,7 +194,7 @@ function ProductCard({ product, onAdd }: { product: Product; onAdd: () => void }
             <div className="product-modal-footer">
               <div className="product-modal-prices">
                 <div>
-                  <span className="product-modal-price-label">Transferencia</span>
+                  <span className="product-modal-price-label">Transferencia · <span className="off-tag">15% off</span></span>
                   <span className="product-modal-price-value">{formatPrice(transfer)}</span>
                 </div>
                 <div>
@@ -206,7 +224,7 @@ export default function Home() {
   const filtered = useMemo(() => {
     let result = catalogProducts.filter((p) => {
       if (need && !needFor(p).includes(need)) return false;
-      if (brand && p.brand !== brand) return false;
+      if (brand && p.brand !== brand && !p.brand.includes(brand)) return false;
       if (type && typeFor(p) !== type) return false;
       return true;
     });
