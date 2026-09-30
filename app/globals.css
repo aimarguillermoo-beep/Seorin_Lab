@@ -533,7 +533,7 @@ footer { display: grid; grid-template-columns: 1.2fr .8fr; gap: 70px; padding: 7
   background: transparent;
 }
 .transfer-price {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 800;
   color: var(--ink);
   line-height: 1;
@@ -555,7 +555,7 @@ footer { display: grid; grid-template-columns: 1.2fr .8fr; gap: 70px; padding: 7
     padding: 2px 4px;
   }
   .transfer-price {
-    font-size: 17px;
+    font-size: 15px;
   }
 }
 
@@ -737,7 +737,7 @@ footer { display: grid; grid-template-columns: 1.2fr .8fr; gap: 70px; padding: 7
   background: transparent;
 }
 .transfer-price {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 800;
   color: var(--ink);
   line-height: 1;
@@ -759,7 +759,7 @@ footer { display: grid; grid-template-columns: 1.2fr .8fr; gap: 70px; padding: 7
     padding: 2px 4px;
   }
   .transfer-price {
-    font-size: 17px;
+    font-size: 15px;
   }
 }
 
