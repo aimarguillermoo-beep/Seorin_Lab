@@ -23,7 +23,6 @@ const catalogNames = [
   "Triple Collagen Serum 4.0",
   "Deep Vita C Pad",
   "Zero Pore Pad 2.0",
-  "Madagascar Centella Tone Brightening Capsule Ampoule",
   "Madagascar Centella Light Cleansing Oil",
   "Collagen Niacinamide Jelly Cream",
   "Madagascar Centella Poremizing Deep Cleansing Foam",
@@ -54,7 +53,6 @@ const featuredProducts = featuredNames.map(getProduct);
 const needMap: Record<string, string[]> = {
   "Hyalu-Cica Water-Fit Sun Serum SPF50+ PA++++": ["Protección solar", "Piel seca y deshidratada"],
   "Madagascar Centella Watergel Sheet Ampoule Mask": ["Piel seca y deshidratada", "Barrera sensible"],
-  "Madagascar Centella Tone Brightening Capsule Ampoule": ["Manchas y tono desigual", "Luminosidad"],
   "Madagascar Centella Light Cleansing Oil": [],
   "Pore + Dark Spot Brightening Pad": ["Manchas y tono desigual", "Luminosidad", "Acné, poros y textura"],
   "The Real Noni Starter Kit": ["Piel seca y deshidratada", "Barrera sensible"],
@@ -84,7 +82,6 @@ const needFor = (p: Product) => needMap[p.name] || [];
 const typeMap: Record<string, string> = {
   "Hyalu-Cica Water-Fit Sun Serum SPF50+ PA++++": "Protector solar",
   "Madagascar Centella Watergel Sheet Ampoule Mask": "Mascarilla",
-  "Madagascar Centella Tone Brightening Capsule Ampoule": "Sérum / Ampoule",
   "Madagascar Centella Light Cleansing Oil": "Limpiador",
   "Pore + Dark Spot Brightening Pad": "Pads",
   "The Real Noni Starter Kit": "Kit / Rutina",
@@ -185,6 +182,7 @@ function ProductCard({ product, onAdd }: { product: Product; onAdd: () => void }
                 <div>
                   <span className="product-modal-price-label">Tarjeta</span>
                   <span className="product-modal-price-card">{formatPrice(product.price)}</span>
+                  <span className="product-modal-price-cuotas">3 cuotas sin interés de {formatPrice(cuota)}</span>
                 </div>
               </div>
               <button className="current-buy-button" type="button" onClick={onAdd} disabled={product.soldOut}>
@@ -280,3 +278,5 @@ export default function Home() {
     </main>
   );
 }
+
+
