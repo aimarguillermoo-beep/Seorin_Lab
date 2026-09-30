@@ -15,7 +15,6 @@ const catalogNames = [
   "Hyalu-Cica Water-Fit Sun Serum SPF50+ PA++++",
   "Madagascar Centella Watergel Sheet Ampoule Mask",
   "Pore + Dark Spot Brightening Pad",
-  "The Real Noni Starter Kit",
   "The Vita A Retinol Shot Tightening Serum",
   "Dual Barrier Skin Wearable Cream",
   "One Day Exosome Shot Pore Serum 2000",
@@ -296,5 +295,6 @@ export default function Home() {
     </main>
   );
 }
+
 
 
