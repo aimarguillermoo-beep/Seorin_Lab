@@ -430,3 +430,17 @@ export const products: Product[] = [
     accent: "#d8853b",
   },
 ];
+
+/** Convierte el nombre del producto en un slug apto para URL (ej: "Dúo Glass Skin" -> "duo-glass-skin"). */
+export const productSlug = (p: Pick<Product, "name">) =>
+  p.name
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/&/g, " y ")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+
+export const getProductBySlug = (slug: string) => products.find((p) => productSlug(p) === slug);
+
+export const productPath = (p: Pick<Product, "name">) => `/producto/${productSlug(p)}`;
