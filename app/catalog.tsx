@@ -286,6 +286,16 @@ export default function Catalog({ initialSlug }: { initialSlug?: string }) {
       setModalOpen(p !== null);
     };
     window.addEventListener("popstate", onPop);
+
+    // Si se entró directo por un link compartido (/producto/<slug>), no hay nada "detrás" en el historial
+    // y el botón atrás del celular sacaría al usuario del sitio. Insertamos la home debajo del producto
+    // para que "atrás" cierre el producto y deje al usuario en el catálogo.
+    const path = window.location.pathname;
+    if (productFromPath(path) && !window.history.state?.seorinModal) {
+      window.history.replaceState({}, "", "/");
+      window.history.pushState({ seorinModal: true }, "", path + window.location.search);
+    }
+
     return () => window.removeEventListener("popstate", onPop);
   }, []);
 
