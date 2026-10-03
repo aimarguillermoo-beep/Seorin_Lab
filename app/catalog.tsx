@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { Check, Share2 } from "lucide-react";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { products, productPath, getProductBySlug, type Product } from "./products";
@@ -235,8 +236,8 @@ function ProductModal({ product, open, onOpenChange, onAdd }: { product: Product
                 <button className="current-buy-button" type="button" onClick={() => onAdd(product)} disabled={product.soldOut}>
                   {product.soldOut ? "Sin stock" : "Agregar al pedido"}
                 </button>
-                <button className="product-modal-share" type="button" onClick={share} aria-label="Compartir producto">
-                  {copied ? "¡Link copiado!" : "Compartir"}
+                <button className="product-modal-share" type="button" onClick={share} aria-label={copied ? "Link copiado" : "Compartir producto"} title={copied ? "¡Link copiado!" : "Compartir"}>
+                  {copied ? <Check aria-hidden="true" /> : <Share2 aria-hidden="true" />}
                 </button>
               </div>
             </div>

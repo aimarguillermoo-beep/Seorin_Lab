@@ -1059,10 +1059,12 @@ footer { display: grid; grid-template-columns: 1.2fr .8fr; gap: 70px; padding: 7
 
 
 /* Botones agregar / compartir del modal de producto */
-.product-modal-actions { display: flex; gap: 10px; }
+.product-modal-actions { display: flex; align-items: center; gap: 10px; }
 .product-modal-actions .current-buy-button { flex: 1; width: auto; }
-.product-modal-share { flex-shrink: 0; min-width: 128px; padding: 0 18px; border: 1px solid var(--ink); border-radius: 999px; background: transparent; color: var(--ink); font-size: 12px; font-weight: 750; cursor: pointer; transition: background .2s, color .2s; }
-.product-modal-share:hover { background: var(--ink); color: #fff; }
+.product-modal-actions .product-modal-share { flex-shrink: 0; display: grid; place-items: center; width: 50px; height: 50px; padding: 0; border: 1px solid var(--ink); border-radius: 50%; background: transparent; color: var(--ink); cursor: pointer; transition: background .2s, color .2s; }
+.product-modal-actions .product-modal-share svg { width: 19px; height: 19px; }
+.product-modal-actions .product-modal-share:hover { background: var(--ink); color: #fff; }
 @media (max-width: 720px) {
-  .product-modal-share { min-width: 108px; padding: 0 12px; font-size: 11px; }
+  .product-modal-actions .product-modal-share { width: 44px; height: 44px; }
+  .product-modal-actions .product-modal-share svg { width: 17px; height: 17px; }
 }
