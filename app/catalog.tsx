@@ -1,8 +1,9 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Check, Share2 } from "lucide-react";
+import { Check, Menu, Share2, X } from "lucide-react";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { products, productPath, getProductBySlug, type Product } from "./products";
 
@@ -260,6 +261,10 @@ export default function Catalog({ initialSlug }: { initialSlug?: string }) {
   const [need, setNeed] = useState("");
   const [brand, setBrand] = useState("");
   const [type, setType] = useState("");
+  const [filterOpen, setFilterOpen] = useState(false);
+  const activeFilters = [need, brand, type].filter(Boolean).length;
+  const clearFilters = () => { setNeed(""); setBrand(""); setType(""); };
+  const showResults = () => { setFilterOpen(false); document.getElementById("productos")?.scrollIntoView({ behavior: "smooth" }); };
 
   // Modal de producto sincronizado con la URL (/producto/<slug>) para poder compartir cada producto.
   const [modalProduct, setModalProduct] = useState<Product | null>(() => (initialSlug ? getProductBySlug(initialSlug) ?? null : null));
@@ -330,6 +335,27 @@ export default function Catalog({ initialSlug }: { initialSlug?: string }) {
           <a className="wordmark" href="#inicio"><img className="brand-logo" src="/seorin-lab-emblem.webp" alt="" /><span>SEORIN LAB</span></a>
           <nav aria-label="Navegación principal">
             <a href="#productos">Productos</a><a href="#segun-tu-piel">Según tu piel</a><a href="#envios-pagos">Envíos y pagos</a>
+            <Popover open={filterOpen} onOpenChange={setFilterOpen}>
+              <PopoverTrigger asChild>
+                <button className="nav-cta filter-trigger" type="button" aria-label="Abrir filtros">
+                  {filterOpen ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
+                  <span className="filter-trigger-label">Filtros</span>
+                  {activeFilters > 0 && <span className="filter-trigger-count">{activeFilters}</span>}
+                </button>
+              </PopoverTrigger>
+              <PopoverContent align="end" sideOffset={10} className="filter-panel">
+                <p className="kicker">Filtrar catálogo</p>
+                <div className="filters filters-stacked">
+                  <label>Tipo de producto<select value={type} onChange={(e) => setType(e.target.value)}><option value="">Todos</option>{["Limpiador","Sérum / Ampoule","Crema hidratante","Pads","Mascarilla","Protector solar","Kit / Rutina","Contorno de ojos","Tónico","Tratamiento / Booster"].map((x) => <option key={x}>{x}</option>)}</select></label>
+                  <label>Necesidad<select value={need} onChange={(e) => setNeed(e.target.value)}><option value="">Todas</option>{["Acné, poros y textura","Manchas y tono desigual","Piel seca y deshidratada","Barrera sensible","Líneas de expresión y firmeza","Luminosidad","Protección solar"].map((x) => <option key={x}>{x}</option>)}</select></label>
+                  <label>Marca<select value={brand} onChange={(e) => setBrand(e.target.value)}><option value="">Todas</option><option>MEDICUBE</option><option>SKIN1004</option><option>CELIMAX</option><option>BEAUTY OF JOSEON</option><option>DR. ALTHEA</option><option>ANUA</option></select></label>
+                </div>
+                <div className="filter-panel-actions">
+                  <button type="button" className="filter-clear" onClick={clearFilters} disabled={activeFilters === 0}>Limpiar</button>
+                  <button type="button" className="current-buy-button" onClick={showResults}>Ver {filtered.length} productos</button>
+                </div>
+              </PopoverContent>
+            </Popover>
             <SheetTrigger asChild><button className="nav-cta cart-trigger" type="button">Carrito <span>{cartCount}</span></button></SheetTrigger>
           </nav>
         </header>
@@ -360,12 +386,10 @@ export default function Catalog({ initialSlug }: { initialSlug?: string }) {
 
       <section className="current-catalog" id="productos">
         <div className="catalog-intro"><p className="kicker">Tu rutina, a tu manera</p><h2>Encontrá tu próximo esencial.</h2></div>
-        <div className="filters">
-          <label><span className="hidden sm:inline">Tipo de producto</span><span className="sm:hidden">Tipo</span><select value={type} onChange={(e) => setType(e.target.value)}><option value="">Todos</option>{["Limpiador","Sérum / Ampoule","Crema hidratante","Pads","Mascarilla","Protector solar","Kit / Rutina","Contorno de ojos","Tónico","Tratamiento / Booster"].map((x) => <option key={x}>{x}</option>)}</select></label>
-          <label>Necesidad<select value={need} onChange={(e) => setNeed(e.target.value)}><option value="">Todas</option>{["Acné, poros y textura","Manchas y tono desigual","Piel seca y deshidratada","Barrera sensible","Líneas de expresión y firmeza","Luminosidad","Protección solar"].map((x) => <option key={x}>{x}</option>)}</select></label>
-          <label>Marca<select value={brand} onChange={(e) => setBrand(e.target.value)}><option value="">Todas</option><option>MEDICUBE</option><option>SKIN1004</option><option>CELIMAX</option><option>BEAUTY OF JOSEON</option><option>DR. ALTHEA</option><option>ANUA</option></select></label>
+        <div className="product-count">
+          <span>{filtered.length} productos{activeFilters > 0 && <> · {[type, need, brand].filter(Boolean).join(" · ")}</>}</span>
+          {activeFilters > 0 ? <button type="button" onClick={clearFilters}>Limpiar filtros</button> : <button type="button" onClick={() => setFilterOpen(true)}>Filtrar</button>}
         </div>
-        <div className="product-count">{filtered.length} productos</div>
         <div className="current-catalog-grid">{filtered.map((p) => <ProductCard key={p.name} product={p} onAdd={() => addToCart(p)} onOpen={() => openProduct(p)} />)}</div>
         <div className="catalog-help"><a href={whatsappLink("Hola Seorin Lab. Necesito ayuda para elegir.")} target="_blank" rel="noreferrer">¿Necesitás ayuda para elegir?</a></div>
       </section>

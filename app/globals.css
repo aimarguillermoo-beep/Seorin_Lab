@@ -79,6 +79,23 @@ nav { display: flex; align-items: center; gap: 28px; font-size: 13px; font-weigh
 .cart-trigger { display: inline-flex; align-items: center; gap: 9px; background: transparent; color: inherit; cursor: pointer; }
 .cart-trigger span { display: grid; min-width: 20px; height: 20px; place-items: center; border-radius: 50%; background: var(--ink); color: white; font-size: 10px; }
 .cart-trigger:hover span { background: white; color: var(--ink); }
+.filter-trigger + .cart-trigger { margin-left: -18px; }
+.filter-panel .filters label { font-size: 10px; gap: 7px; }
+.filter-panel .filters select { min-height: 43px; padding: 0 12px; font-size: 14px; }
+.product-count { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.product-count button { padding: 0 0 2px; border: 0; border-bottom: 1px solid currentColor; background: none; color: var(--ink); font: inherit; font-weight: 750; cursor: pointer; }
+.filter-trigger { display: inline-flex; align-items: center; gap: 8px; background: transparent; color: inherit; cursor: pointer; font: inherit; }
+.filter-trigger svg { width: 16px; height: 16px; flex: 0 0 auto; }
+.filter-trigger-count { display: grid; min-width: 20px; height: 20px; place-items: center; border-radius: 50%; background: var(--ink); color: white; font-size: 10px; }
+.filter-trigger:hover .filter-trigger-count, .filter-trigger[data-state="open"] .filter-trigger-count { background: white; color: var(--ink); }
+.filter-trigger[data-state="open"] { background: var(--ink); color: white; }
+.filter-panel.filter-panel { width: min(340px, calc(100vw - 24px)); padding: 20px; border: 1px solid var(--line); border-radius: 14px; background: #fbf8f4; color: var(--ink); box-shadow: 0 18px 50px rgba(30, 22, 18, .14); }
+.filter-panel .kicker { margin: 0 0 14px; font-size: 10px; font-weight: 800; letter-spacing: .08em; color: #6c625c; }
+.filters.filters-stacked { grid-template-columns: 1fr; gap: 14px; margin: 0; }
+.filter-panel-actions { display: flex; align-items: center; gap: 12px; margin-top: 18px; }
+.filter-panel-actions .current-buy-button { flex: 1; margin: 0; }
+.filter-clear { padding: 0 2px 3px; border: 0; border-bottom: 1px solid currentColor; background: none; color: var(--ink); font: inherit; font-size: 12px; font-weight: 700; cursor: pointer; }
+.filter-clear:disabled { opacity: .35; cursor: default; }
 
 .hero {
   display: grid;
@@ -617,6 +634,10 @@ footer { display: grid; grid-template-columns: 1.2fr .8fr; gap: 70px; padding: 7
   .brand-logo { width: 30px; height: 30px; }
   .nav-cta { padding: 7px 11px; font-size: 10px; }
   .cart-trigger span { min-width: 17px; height: 17px; font-size: 9px; }
+  .filter-trigger { gap: 6px; }
+  .filter-trigger svg { width: 14px; height: 14px; }
+  .filter-trigger-count { min-width: 17px; height: 17px; font-size: 9px; }
+  .filter-trigger + .cart-trigger { margin-left: -20px; }
 
   /* === HERO === */
   .current-hero .hero-visual { min-height: 280px; }
