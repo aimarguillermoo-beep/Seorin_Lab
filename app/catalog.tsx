@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Check, Menu, Share2, X } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, Menu, Share2, X } from "lucide-react";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -126,6 +126,13 @@ const typeMap: Record<string, string> = {
   "Dúo Brightening": "Kit / Rutina",
 };
 const typeFor = (p: Product) => typeMap[p.name] || "Otros";
+
+type FilterKey = "type" | "need" | "brand";
+const filterGroups: { key: FilterKey; label: string; options: string[] }[] = [
+  { key: "type", label: "Tipo de producto", options: ["Limpiador", "Tónico", "Sérum / Ampoule", "Tratamiento / Booster", "Crema hidratante", "Contorno de ojos", "Pads", "Mascarilla", "Protector solar", "Kit / Rutina"] },
+  { key: "need", label: "Necesidad de la piel", options: ["Acné, poros y textura", "Manchas y tono desigual", "Piel seca y deshidratada", "Barrera sensible", "Líneas de expresión y firmeza", "Luminosidad", "Protección solar"] },
+  { key: "brand", label: "Marca", options: ["MEDICUBE", "SKIN1004", "CELIMAX", "BEAUTY OF JOSEON", "DR. ALTHEA", "ANUA"] },
+];
 
 function ProductCard({ product, onAdd, onOpen }: { product: Product; onAdd: () => void; onOpen: () => void }) {
   const cuota = product.price / 3;
@@ -261,10 +268,14 @@ export default function Catalog({ initialSlug }: { initialSlug?: string }) {
   const [need, setNeed] = useState("");
   const [brand, setBrand] = useState("");
   const [type, setType] = useState("");
-  const [filterOpen, setFilterOpen] = useState(false);
+  const [filterOpen, setFilterOpenState] = useState(false);
+  const [filterView, setFilterView] = useState<FilterKey | null>(null);
+  const setFilterOpen = (open: boolean) => { setFilterOpenState(open); if (!open) setTimeout(() => setFilterView(null), 200); };
+  const filterValues: Record<FilterKey, string> = { type, need, brand };
   const activeFilters = [need, brand, type].filter(Boolean).length;
   const clearFilters = () => { setNeed(""); setBrand(""); setType(""); };
   const showResults = () => { setFilterOpen(false); document.getElementById("productos")?.scrollIntoView({ behavior: "smooth" }); };
+  const applyFilter = (key: FilterKey, value: string) => { ({ type: setType, need: setNeed, brand: setBrand })[key](value); showResults(); };
 
   // Modal de producto sincronizado con la URL (/producto/<slug>) para poder compartir cada producto.
   const [modalProduct, setModalProduct] = useState<Product | null>(() => (initialSlug ? getProductBySlug(initialSlug) ?? null : null));
@@ -335,6 +346,7 @@ export default function Catalog({ initialSlug }: { initialSlug?: string }) {
           <a className="wordmark" href="#inicio"><img className="brand-logo" src="/seorin-lab-emblem.webp" alt="" /><span>SEORIN LAB</span></a>
           <nav aria-label="Navegación principal">
             <a href="#productos">Productos</a><a href="#segun-tu-piel">Según tu piel</a><a href="#envios-pagos">Envíos y pagos</a>
+            <SheetTrigger asChild><button className="nav-cta cart-trigger" type="button">Carrito <span>{cartCount}</span></button></SheetTrigger>
             <Popover open={filterOpen} onOpenChange={setFilterOpen}>
               <PopoverTrigger asChild>
                 <button className="nav-cta filter-trigger" type="button" aria-label="Abrir filtros">
@@ -344,19 +356,35 @@ export default function Catalog({ initialSlug }: { initialSlug?: string }) {
                 </button>
               </PopoverTrigger>
               <PopoverContent align="end" sideOffset={10} className="filter-panel">
-                <p className="kicker">Filtrar catálogo</p>
-                <div className="filters filters-stacked">
-                  <label>Tipo de producto<select value={type} onChange={(e) => setType(e.target.value)}><option value="">Todos</option>{["Limpiador","Sérum / Ampoule","Crema hidratante","Pads","Mascarilla","Protector solar","Kit / Rutina","Contorno de ojos","Tónico","Tratamiento / Booster"].map((x) => <option key={x}>{x}</option>)}</select></label>
-                  <label>Necesidad<select value={need} onChange={(e) => setNeed(e.target.value)}><option value="">Todas</option>{["Acné, poros y textura","Manchas y tono desigual","Piel seca y deshidratada","Barrera sensible","Líneas de expresión y firmeza","Luminosidad","Protección solar"].map((x) => <option key={x}>{x}</option>)}</select></label>
-                  <label>Marca<select value={brand} onChange={(e) => setBrand(e.target.value)}><option value="">Todas</option><option>MEDICUBE</option><option>SKIN1004</option><option>CELIMAX</option><option>BEAUTY OF JOSEON</option><option>DR. ALTHEA</option><option>ANUA</option></select></label>
-                </div>
-                <div className="filter-panel-actions">
-                  <button type="button" className="filter-clear" onClick={clearFilters} disabled={activeFilters === 0}>Limpiar</button>
-                  <button type="button" className="current-buy-button" onClick={showResults}>Ver {filtered.length} productos</button>
-                </div>
+                {(() => {
+                  const group = filterGroups.find((g) => g.key === filterView);
+                  if (!group) return (
+                    <ul className="filter-menu">
+                      <li className="filter-menu-head"><span>Filtrar catálogo</span>{activeFilters > 0 && <button type="button" onClick={clearFilters}>Limpiar</button>}</li>
+                      <li><button type="button" className="filter-row" onClick={() => { clearFilters(); showResults(); }}><span>Ver todo el catálogo</span></button></li>
+                      {filterGroups.map((g) => (
+                        <li key={g.key}>
+                          <button type="button" className="filter-row" onClick={() => setFilterView(g.key)}>
+                            <span>{g.label}{filterValues[g.key] && <small>{filterValues[g.key]}</small>}</span>
+                            <ArrowRight aria-hidden="true" />
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  );
+                  const current = filterValues[group.key];
+                  return (
+                    <ul className="filter-menu">
+                      <li><button type="button" className="filter-row filter-back" onClick={() => setFilterView(null)}><ArrowLeft aria-hidden="true" /><span>{group.label}</span></button></li>
+                      <li><button type="button" className="filter-row filter-all" onClick={() => applyFilter(group.key, "")}><span>Ver todo en {group.label}</span>{!current && <Check aria-hidden="true" />}</button></li>
+                      {group.options.map((o) => (
+                        <li key={o}><button type="button" className={`filter-row${current === o ? " is-active" : ""}`} onClick={() => applyFilter(group.key, o)}><span>{o}</span>{current === o && <Check aria-hidden="true" />}</button></li>
+                      ))}
+                    </ul>
+                  );
+                })()}
               </PopoverContent>
             </Popover>
-            <SheetTrigger asChild><button className="nav-cta cart-trigger" type="button">Carrito <span>{cartCount}</span></button></SheetTrigger>
           </nav>
         </header>
         <SheetContent className="cart-sheet">
