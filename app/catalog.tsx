@@ -347,44 +347,66 @@ export default function Catalog({ initialSlug }: { initialSlug?: string }) {
           <nav aria-label="Navegación principal">
             <a href="#productos">Productos</a><a href="#segun-tu-piel">Según tu piel</a><a href="#envios-pagos">Envíos y pagos</a>
             <SheetTrigger asChild><button className="nav-cta cart-trigger" type="button">Carrito <span>{cartCount}</span></button></SheetTrigger>
-            <Popover open={filterOpen} onOpenChange={setFilterOpen}>
-              <PopoverTrigger asChild>
+            <Sheet open={filterOpen} onOpenChange={setFilterOpen}>
+              <SheetTrigger asChild>
                 <button className="nav-cta filter-trigger" type="button" aria-label="Abrir filtros">
-                  {filterOpen ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
+                  <Menu aria-hidden="true" className="filter-icon" />
                   <span className="filter-trigger-label">Filtros</span>
                   {activeFilters > 0 && <span className="filter-trigger-count">{activeFilters}</span>}
                 </button>
-              </PopoverTrigger>
-              <PopoverContent align="end" sideOffset={10} className="filter-panel">
+              </SheetTrigger>
+              <SheetContent side="right" className="filter-sheet" showCloseButton={false}>
+                <div className="filter-sheet-header">
+                  <span className="filter-sheet-title">Filtros</span>
+                  <button className="filter-sheet-close" onClick={() => setFilterOpen(false)} aria-label="Cerrar"><X aria-hidden="true" /></button>
+                </div>
                 {(() => {
                   const group = filterGroups.find((g) => g.key === filterView);
                   if (!group) return (
-                    <ul className="filter-menu">
-                      <li className="filter-menu-head"><span>Filtrar catálogo</span>{activeFilters > 0 && <button type="button" onClick={clearFilters}>Limpiar</button>}</li>
-                      <li><button type="button" className="filter-row" onClick={() => { clearFilters(); showResults(); }}><span>Ver todo el catálogo</span></button></li>
-                      {filterGroups.map((g) => (
-                        <li key={g.key}>
-                          <button type="button" className="filter-row" onClick={() => setFilterView(g.key)}>
-                            <span>{g.label}{filterValues[g.key] && <small>{filterValues[g.key]}</small>}</span>
-                            <ArrowRight aria-hidden="true" />
-                          </button>
-                        </li>
-                      ))}
-                    </ul>
+                    <div className="filter-sheet-body">
+                      <ul className="filter-menu-list">
+                        {filterGroups.map((g) => (
+                          <li key={g.key}>
+                            <button type="button" className="filter-row" onClick={() => setFilterView(g.key)}>
+                              <span>{g.label}{filterValues[g.key] && <small>{filterValues[g.key]}</small>}</span>
+                              <ArrowRight aria-hidden="true" />
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                      <div className="filter-sheet-footer">
+                        <button type="button" className="filter-all-link" onClick={() => { clearFilters(); setFilterOpen(false); }}>Ver todos los productos</button>
+                      </div>
+                    </div>
                   );
                   const current = filterValues[group.key];
                   return (
-                    <ul className="filter-menu">
-                      <li><button type="button" className="filter-row filter-back" onClick={() => setFilterView(null)}><ArrowLeft aria-hidden="true" /><span>{group.label}</span></button></li>
-                      <li><button type="button" className="filter-row filter-all" onClick={() => applyFilter(group.key, "")}><span>Ver todo en {group.label}</span>{!current && <Check aria-hidden="true" />}</button></li>
-                      {group.options.map((o) => (
-                        <li key={o}><button type="button" className={`filter-row${current === o ? " is-active" : ""}`} onClick={() => applyFilter(group.key, o)}><span>{o}</span>{current === o && <Check aria-hidden="true" />}</button></li>
-                      ))}
-                    </ul>
+                    <div className="filter-sheet-body is-submenu">
+                      <button type="button" className="filter-back" onClick={() => setFilterView(null)}>
+                        <ArrowLeft aria-hidden="true" />
+                        <span>{group.label}</span>
+                      </button>
+                      <ul className="filter-submenu-list">
+                        <li>
+                          <button type="button" className={`filter-subrow${!current ? " is-active" : ""}`} onClick={() => applyFilter(group.key, "")}>
+                            <span>Ver todo en {group.label}</span>
+                            {!current && <Check aria-hidden="true" />}
+                          </button>
+                        </li>
+                        {group.options.map((o) => (
+                          <li key={o}>
+                            <button type="button" className={`filter-subrow${current === o ? " is-active" : ""}`} onClick={() => applyFilter(group.key, o)}>
+                              <span>{o}</span>
+                              {current === o && <Check aria-hidden="true" />}
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   );
                 })()}
-              </PopoverContent>
-            </Popover>
+              </SheetContent>
+            </Sheet>
           </nav>
         </header>
         <SheetContent className="cart-sheet">
