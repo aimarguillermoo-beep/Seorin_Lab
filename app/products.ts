@@ -250,7 +250,6 @@ export const products: Product[] = [
     transfer: 44900,
     image: "/products-edited/celimax-retinal.jpeg",
     accent: "#d7dd41",
-    preorder: true,
   },
   {
     brand: "BEAUTY OF JOSEON",
@@ -303,7 +302,6 @@ export const products: Product[] = [
     transfer: 48900,
     image: "/products-edited/medicube-txa-serum.jpeg",
     accent: "#eb7c8a",
-    preorder: true,
   },
   {
     brand: "DR. ALTHEA",
@@ -317,7 +315,6 @@ export const products: Product[] = [
     transfer: 49900,
     image: "/products-edited/dr-althea-vit-c.jpeg",
     accent: "#d8853b",
-    preorder: true,
   },
   {
     brand: "SKIN1004",
