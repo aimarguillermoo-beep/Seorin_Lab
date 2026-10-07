@@ -161,7 +161,7 @@ function ProductCard({ product, onAdd, onOpen }: { product: Product; onAdd: () =
               <span className="price-cuotas">3 cuotas sin interés de {formatPrice(cuota)}</span>
             </div>
             <div className="price-transfer-group">
-              <span className="transfer-badge">Transferencia · <span className="off-tag">15% off</span></span>
+              <span className="transfer-badge">Transferencia · <span className="off-tag">20% off</span></span>
               <strong className="transfer-price">{formatPrice(transfer)}</strong>
             </div>
           </div>
@@ -231,7 +231,7 @@ function ProductModal({ product, open, onOpenChange, onAdd }: { product: Product
             <div className="product-modal-footer">
               <div className="product-modal-prices">
                 <div>
-                  <span className="product-modal-price-label">Transferencia · <span className="off-tag">15% off</span></span>
+                  <span className="product-modal-price-label">Transferencia · <span className="off-tag">20% off</span></span>
                   <span className="product-modal-price-value">{formatPrice(transfer)}</span>
                 </div>
                 <div>
