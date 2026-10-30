@@ -458,8 +458,6 @@ export default function Catalog({ initialSlug }: { initialSlug?: string }) {
             <span className="cyber-banner-tag">CYBER SKIN DAYS</span>
             <p className="cyber-banner-title">HASTA 30% OFF</p>
             <p className="cyber-banner-meta">
-              <span>PAGANDO POR TRANSFERENCIA</span>
-              <span className="cyber-banner-dot" aria-hidden="true">·</span>
               <span>31/10 AL 06/11</span>
             </p>
           </div>
