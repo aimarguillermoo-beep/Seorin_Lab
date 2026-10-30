@@ -8,6 +8,7 @@ export type Product = {
   use: string;
   price: number;
   transfer?: number;
+  cyberTransfer?: number;
   image: string;
   imageScene?: boolean;
   accent: string;
@@ -27,6 +28,7 @@ export const products: Product[] = [
     price: 60900,
     transfer: 49900,
     image: "/products-edited/skin1004-cleansing.jpeg",
+    soldOut: true,
     accent: "#e9d2a7",
   },
   {
@@ -39,6 +41,7 @@ export const products: Product[] = [
     use: "Usá una cantidad generosa como último paso de la mañana y reaplicá.",
     price: 56000,
     transfer: 45900,
+    cyberTransfer: 39900,
     image: "/products-edited/skin1004-sun.jpeg",
     accent: "#b9d8e8",
   },
@@ -52,6 +55,7 @@ export const products: Product[] = [
     use: "Dejá actuar de 10 a 20 minutos y masajeá el excedente. No enjuagues.",
     price: 9200,
     transfer: 7500,
+    cyberTransfer: 6900,
     image: "/products-v11/skin1004-mask.webp",
     imageScene: true,
     accent: "#d6c39f",
@@ -66,6 +70,7 @@ export const products: Product[] = [
     use: "Deslizá un pad después de limpiar o usalo como mini mascarilla puntual.",
     price: 48700,
     transfer: 39900,
+    cyberTransfer: 36900,
     image: "/products-edited/celimax-pad.jpeg",
     accent: "#efd35f",
   },
@@ -92,6 +97,7 @@ export const products: Product[] = [
     use: "Introducí de noche, 1 o 2 veces por semana. No mezcles con otros exfoliantes.",
     price: 54800,
     transfer: 44900,
+    cyberTransfer: 39900,
     image: "/products-edited/celimax-retinol.jpeg",
     accent: "#c8c6c1",
   },
@@ -105,6 +111,7 @@ export const products: Product[] = [
     use: "Aplicá como último paso, de mañana o de noche.",
     price: 60900,
     transfer: 49900,
+    cyberTransfer: 44900,
     image: "/products-edited/celimax-barrier.jpeg",
     accent: "#d8d6cf",
   },
@@ -118,6 +125,7 @@ export const products: Product[] = [
     use: "Usá de noche, gradualmente, dentro de una rutina simple. Puede sentirse cosquilleo.",
     price: 59700,
     transfer: 48900,
+    cyberTransfer: 44900,
     image: "/products-edited/medicube-exosome.jpeg",
     accent: "#819ec7",
   },
@@ -131,6 +139,7 @@ export const products: Product[] = [
     use: "Aplicá una capa uniforme como último paso, dejá secar y retirala al despertar.",
     price: 60900,
     transfer: 49900,
+    cyberTransfer: 44900,
     image: "/products-edited/medicube-mask.jpeg",
     accent: "#d7a49d",
   },
@@ -144,6 +153,7 @@ export const products: Product[] = [
     use: "Aplicá después del tónico, de mañana o de noche.",
     price: 58500,
     transfer: 47900,
+    cyberTransfer: 44900,
     image: "/products-edited/medicube-serum.jpeg",
     accent: "#e0b4b5",
   },
@@ -157,6 +167,7 @@ export const products: Product[] = [
     use: "Aplicar como último paso de la rutina, después de los sérums. Puede utilizarse por la mañana o por la noche.",
     price: 64600,
     transfer: 52900,
+    cyberTransfer: 49900,
     image: "/products-edited/medicube-jelly.jpeg",
     accent: "#e8a9b4",
   },
@@ -170,6 +181,7 @@ export const products: Product[] = [
     use: "Pasá un pad después de limpiar o dejalo unos minutos sobre una zona puntual.",
     price: 60900,
     transfer: 49900,
+    cyberTransfer: 47900,
     image: "/products-edited/medicube-vitac.jpeg",
     accent: "#b49a76",
   },
@@ -183,6 +195,7 @@ export const products: Product[] = [
     use: "Empezá 2 o 3 noches por semana y usá protector solar al día siguiente.",
     price: 64600,
     transfer: 52900,
+    cyberTransfer: 49900,
     image: "/products-edited/medicube-pore.jpeg",
     accent: "#84a5cf",
   },
@@ -196,6 +209,7 @@ export const products: Product[] = [
     use: "Aplicar una pequeña cantidad sobre las manos húmedas. Agregar agua y generar espuma. Masajear suavemente sobre el rostro húmedo evitando el áárea de los ojos. Enjuagar completamente.",
     price: 48700,
     transfer: 39900,
+    cyberTransfer: 34900,
     image: "/products-edited/skin1004-poremizing-foam.jpeg",
     accent: "#e5b4b7",
   },
@@ -209,6 +223,7 @@ export const products: Product[] = [
     use: "Aplicar una pequeña cantidad sobre las manos húmedas. Generar espuma con agua. Masajear suavemente sobre el rostro húmedo. Enjuagar completamente.",
     price: 48700,
     transfer: 39900,
+    cyberTransfer: 34900,
     image: "/products-edited/skin1004-ampoule-foam.jpeg",
     accent: "#b78759",
   },
@@ -222,6 +237,7 @@ export const products: Product[] = [
     use: "Agitar bien antes de usar. Aplicar generosamente como último paso de la rutina de skincare. Distribuir de manera uniforme sobre el rostro. Reaplicar durante el día.",
     price: 68200,
     transfer: 55900,
+    cyberTransfer: 49900,
     image: "/products-edited/boj-tinted-sunscreen.jpeg",
     accent: "#d4a991",
   },
@@ -235,6 +251,7 @@ export const products: Product[] = [
     use: "Aplicar como último paso de la rutina. Distribuir una cantidad adecuada sobre rostro y cuello. Presionar suavemente hasta absorber.",
     price: 65800,
     transfer: 53900,
+    cyberTransfer: 47900,
     image: "/products-edited/dr-althea-345.jpeg",
     accent: "#a9b9b1",
   },
@@ -249,6 +266,7 @@ export const products: Product[] = [
     price: 54800,
     transfer: 44900,
     image: "/products-edited/celimax-retinal.jpeg",
+    soldOut: true,
     accent: "#d7dd41",
   },
   {
@@ -261,6 +279,7 @@ export const products: Product[] = [
     use: "Presionar 1 o 2 veces. Aplicar con el dedo anular alrededor del contorno. Dar suaves toques hasta absorber. Finalizar con protector solar. Consultar a un profesional si hay embarazo o lactancia.",
     price: 52400,
     transfer: 42900,
+    cyberTransfer: 39900,
     image: "/products-edited/boj-eye-serum.jpeg",
     accent: "#efdfd4",
   },
@@ -274,6 +293,7 @@ export const products: Product[] = [
     use: "Comenzar utilizando 1-2 gotas, 1-2 veces por semana e ir aumentando. Aplicar después del tónico y antes de la crema. Finalizar con protector solar de día.",
     price: 63400,
     transfer: 51900,
+    cyberTransfer: 44900,
     image: "/products-edited/anua-azelaic.jpeg",
     accent: "#76c04f",
   },
@@ -287,6 +307,7 @@ export const products: Product[] = [
     use: "Después de la limpieza, aplicar sobre un algodón o con las manos. Distribuir suavemente sobre rostro y cuello. Continuar con sérum y crema hidratante.",
     price: 48700,
     transfer: 39900,
+    cyberTransfer: 34900,
     image: "/products-edited/skin1004-toner.jpeg",
     accent: "#c29d60",
   },
@@ -300,6 +321,7 @@ export const products: Product[] = [
     use: "Aplicar unas gotas después del tónico y antes de la crema hidratante. Puede utilizarse por la mañana o por la noche. Durante el día, finalizar siempre con protector solar.",
     price: 59700,
     transfer: 48900,
+    cyberTransfer: 44900,
     image: "/products-edited/medicube-txa-serum.jpeg",
     accent: "#eb7c8a",
   },
@@ -313,6 +335,7 @@ export const products: Product[] = [
     use: "Aplicar unas gotas después de la limpieza y el tónico. Continuar con crema hidratante. Puede utilizarse por la mañana o por la noche; durante el día finalizar siempre con protector solar.",
     price: 60900,
     transfer: 49900,
+    cyberTransfer: 44900,
     image: "/products-edited/dr-althea-vit-c.jpeg",
     accent: "#d8853b",
   },
@@ -326,6 +349,7 @@ export const products: Product[] = [
     use: "Aplicar una pequeña cantidad alrededor del contorno de ojos y masajear suavemente desde el interior hacia el exterior hasta absorber.",
     price: 48900,
     transfer: 39900,
+    cyberTransfer: 36900,
     image: "/products-edited/skin1004-probio-cica-eye.jpeg",
     accent: "#b09b85",
   },
@@ -340,6 +364,7 @@ export const products: Product[] = [
     price: 73100,
     transfer: 59900,
     image: "/products-edited/medicube-pdrn-capsule.jpeg",
+    soldOut: true,
     accent: "#f4a2b9",
   },
   {
@@ -352,6 +377,7 @@ export const products: Product[] = [
     use: "1. Aplicar el Madagascar Centella Ampoule Foam sobre el rostro húmedo, masajear suavemente hasta formar espuma y enjuagar. 2. Aplicar luego el Madagascar Centella Toning Toner sobre la piel limpia con las manos o con un pad de algodón. 3. Continuar con serum o ampoule, crema hidratante y, durante el día, protector solar.",
     price: 91400,
     transfer: 74900,
+    cyberTransfer: 59900,
     image: "/products/duo-doble-limpieza.jpeg",
     accent: "#c8a24e",
   },
@@ -365,6 +391,7 @@ export const products: Product[] = [
     use: "Aplicá primero el Triple Collagen Serum sobre la piel limpia y continuá con la Jelly Cream. Podés utilizar el dúo de mañana y/o de noche.",
     price: 114600,
     transfer: 93900,
+    cyberTransfer: 74900,
     image: "/products/duo-glass-skin.jpeg",
     accent: "#e0b4b5",
   },
@@ -391,6 +418,7 @@ export const products: Product[] = [
     use: "Incorporá ambos productos de forma progresiva. Podés alternarlos por la noche según la tolerancia de tu piel y completar siempre la rutina con hidratación.",
     price: 115800,
     transfer: 94900,
+    cyberTransfer: 79900,
     image: "/products/duo-poros-textura.jpeg",
     accent: "#5f8cc7",
   },
@@ -404,6 +432,7 @@ export const products: Product[] = [
     use: "Aplicá primero el Azelaic Acid sobre la piel limpia y continuá con la 345 Relief Cream. Si recién incorporás ácido azelaico, comenzá de forma progresiva.",
     price: 119500,
     transfer: 97900,
+    cyberTransfer: 79900,
     image: "/products/duo-calm-clear.jpeg",
     accent: "#76c04f",
   },
@@ -417,6 +446,7 @@ export const products: Product[] = [
     use: "Incorporá los pads de forma progresiva y continuá con el serum de vitamina C. Ajustá la frecuencia según la tolerancia de tu piel y, durante el día, finalizá siempre con protector solar.",
     price: 113400,
     transfer: 92900,
+    cyberTransfer: 74900,
     image: "/products/duo-brightening.jpeg",
     accent: "#d8853b",
   },
@@ -435,3 +465,9 @@ export const productSlug = (p: Pick<Product, "name">) =>
 export const getProductBySlug = (slug: string) => products.find((p) => productSlug(p) === slug);
 
 export const productPath = (p: Pick<Product, "name">) => `/producto/${productSlug(p)}`;
+
+/** Vigencia CYBER SKIN DAYS: 31/10/2026 00:00:00 al 06/11/2026 23:59:59.999 (hora Argentina, UTC-3). */
+export const CYBER_START_MS = Date.parse("2026-10-31T00:00:00-03:00");
+export const CYBER_END_MS = Date.parse("2026-11-06T23:59:59.999-03:00");
+export const isCyberDateActive = (nowMs: number = Date.now()) =>
+  nowMs >= CYBER_START_MS && nowMs <= CYBER_END_MS;

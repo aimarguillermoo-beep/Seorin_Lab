@@ -1,4 +1,4 @@
-﻿@import "tailwindcss";
+@import "tailwindcss";
 @import "tw-animate-css";
 @import "../vendor/shadcn-tailwind-4.13.0.css";
 
@@ -1114,4 +1114,155 @@ footer { display: grid; grid-template-columns: 1.2fr .8fr; gap: 70px; padding: 7
 @media (max-width: 720px) {
   .product-modal-actions .product-modal-share { width: 44px; height: 44px; }
   .product-modal-actions .product-modal-share svg { width: 17px; height: 17px; }
+}
+
+
+/* ============================================
+   CYBER SKIN DAYS (31/10/2026 – 06/11/2026)
+   ============================================ */
+.cyber-banner {
+  padding: 20px clamp(22px, 5vw, 72px);
+  background: var(--ink);
+  color: var(--paper);
+  border-bottom: 1px solid var(--line);
+  text-align: center;
+}
+.cyber-banner-inner {
+  max-width: 1120px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px 22px;
+}
+.cyber-banner-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border: 1px solid rgba(234, 216, 217, 0.45);
+  border-radius: 999px;
+  color: var(--rose);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.cyber-banner-title {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(22px, 2.5vw, 32px);
+  font-weight: 400;
+  letter-spacing: -0.025em;
+  line-height: 1.05;
+  color: #ffffff;
+}
+.cyber-banner-meta {
+  margin: 0;
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 750;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: #e6dcd6;
+}
+.cyber-banner-dot {
+  color: var(--rose);
+}
+
+.price-transfer-group.is-cyber {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+}
+.cyber-badge {
+  display: inline-block;
+  align-self: flex-start;
+  padding: 2.5px 6px;
+  border-radius: 4px;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.11em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+.transfer-old-price {
+  margin-top: 2px;
+  font-size: 13px;
+  font-weight: 500;
+  font-variant-numeric: lining-nums tabular-nums;
+  color: #7c716b;
+  text-decoration: line-through;
+  text-decoration-thickness: 1.2px;
+  line-height: 1.15;
+}
+.transfer-price.cyber-price {
+  font-size: 20px;
+  font-weight: 800;
+  font-variant-numeric: lining-nums tabular-nums;
+  color: var(--ink);
+  letter-spacing: -0.015em;
+  line-height: 1.05;
+}
+.transfer-method-label {
+  font-size: 9px;
+  font-weight: 750;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #416751;
+  line-height: 1.2;
+}
+.product-modal-price-old {
+  font-size: 14px;
+  font-weight: 500;
+  font-variant-numeric: lining-nums tabular-nums;
+  color: #7c716b;
+  text-decoration: line-through;
+  text-decoration-thickness: 1.2px;
+  line-height: 1.15;
+}
+
+@media (max-width: 768px) {
+  .cyber-banner {
+    padding: 15px 16px;
+  }
+  .cyber-banner-inner {
+    flex-direction: column;
+    gap: 6px;
+  }
+  .cyber-banner-tag {
+    font-size: 9px;
+    padding: 3px 9px;
+  }
+  .cyber-banner-title {
+    font-size: 23px;
+  }
+  .cyber-banner-meta {
+    font-size: 9.5px;
+    letter-spacing: 0.1em;
+    gap: 6px;
+  }
+  .cyber-badge {
+    font-size: 8px;
+    padding: 2px 5px;
+  }
+  .transfer-old-price {
+    font-size: 11.5px;
+  }
+  .transfer-price.cyber-price {
+    font-size: 17px;
+  }
+  .transfer-method-label {
+    font-size: 8px;
+  }
+  .product-modal-price-old {
+    font-size: 12.5px;
+  }
 }

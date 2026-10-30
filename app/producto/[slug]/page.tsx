@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import Catalog from "../../catalog";
-import { getProductBySlug } from "../../products";
+import { getProductBySlug, isCyberDateActive } from "../../products";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -20,7 +20,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const proto = h.get("x-forwarded-proto") ?? (host.startsWith("localhost") ? "http" : "https");
 
   const title = `${product.name} | Seorin Lab`;
-  const transfer = product.transfer || Math.round(product.price / 1.15);
+  const baseTransfer = product.transfer || Math.round(product.price / 1.15);
+  const transfer = !product.soldOut && typeof product.cyberTransfer === "number" && isCyberDateActive() ? product.cyberTransfer : baseTransfer;
   const description = `${product.brand} · ${product.size} — ${formatPrice(transfer)} por transferencia. ${product.description}`;
 
   return {

@@ -5,7 +5,7 @@ import { ArrowLeft, ArrowRight, Check, Menu, Share2, X } from "lucide-react";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { products, productPath, getProductBySlug, type Product } from "./products";
+import { products, productPath, getProductBySlug, isCyberDateActive, type Product } from "./products";
 
 const whatsappNumber = "5491125578250";
 const formatPrice = (value: number) => new Intl.NumberFormat("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 0 }).format(value);
@@ -134,9 +134,10 @@ const filterGroups: { key: FilterKey; label: string; options: string[] }[] = [
   { key: "brand", label: "Marca", options: ["MEDICUBE", "SKIN1004", "CELIMAX", "BEAUTY OF JOSEON", "DR. ALTHEA", "ANUA"] },
 ];
 
-function ProductCard({ product, onAdd, onOpen }: { product: Product; onAdd: () => void; onOpen: () => void }) {
+function ProductCard({ product, cyberActive, onAdd, onOpen }: { product: Product; cyberActive: boolean; onAdd: () => void; onOpen: () => void }) {
   const cuota = product.price / 3;
   const transfer = product.transfer || Math.round(product.price / 1.15);
+  const hasCyber = cyberActive && !product.soldOut && typeof product.cyberTransfer === "number";
   const href = productPath(product);
   // Permite abrir en pestaña nueva / copiar link con click derecho, pero con click normal abre el modal sin recargar.
   const handleOpen = (e: React.MouseEvent) => {
@@ -160,10 +161,19 @@ function ProductCard({ product, onAdd, onOpen }: { product: Product; onAdd: () =
               <span className="price-list">{formatPrice(product.price)}</span>
               <span className="price-cuotas">3 cuotas sin interés de {formatPrice(cuota)}</span>
             </div>
-            <div className="price-transfer-group">
-              <span className="transfer-badge">Transferencia · <span className="off-tag">20% off</span></span>
-              <strong className="transfer-price">{formatPrice(transfer)}</strong>
-            </div>
+            {hasCyber ? (
+              <div className="price-transfer-group is-cyber">
+                <span className="cyber-badge">CYBER</span>
+                <span className="transfer-old-price">{formatPrice(transfer)}</span>
+                <strong className="transfer-price cyber-price">{formatPrice(product.cyberTransfer!)}</strong>
+                <span className="transfer-method-label">Transferencia</span>
+              </div>
+            ) : (
+              <div className="price-transfer-group">
+                <span className="transfer-badge">Transferencia · <span className="off-tag">20% off</span></span>
+                <strong className="transfer-price">{formatPrice(transfer)}</strong>
+              </div>
+            )}
           </div>
 
           <a href={href} onClick={handleOpen} className="current-product-details block text-left cursor-pointer w-full bg-transparent border-0 p-0 m-[14px_0] border-y border-[var(--line)] no-underline">
@@ -178,12 +188,13 @@ function ProductCard({ product, onAdd, onOpen }: { product: Product; onAdd: () =
   );
 }
 
-function ProductModal({ product, open, onOpenChange, onAdd }: { product: Product | null; open: boolean; onOpenChange: (open: boolean) => void; onAdd: (p: Product) => void }) {
+function ProductModal({ product, cyberActive, open, onOpenChange, onAdd }: { product: Product | null; cyberActive: boolean; open: boolean; onOpenChange: (open: boolean) => void; onAdd: (p: Product) => void }) {
   const [copiedFor, setCopiedFor] = useState<string | null>(null);
   if (!product) return null;
   const copied = copiedFor === product.name;
   const cuota = product.price / 3;
   const transfer = product.transfer || Math.round(product.price / 1.15);
+  const hasCyber = cyberActive && !product.soldOut && typeof product.cyberTransfer === "number";
 
   const share = async () => {
     const url = `${window.location.origin}${productPath(product)}`;
@@ -231,8 +242,19 @@ function ProductModal({ product, open, onOpenChange, onAdd }: { product: Product
             <div className="product-modal-footer">
               <div className="product-modal-prices">
                 <div>
-                  <span className="product-modal-price-label">Transferencia · <span className="off-tag">20% off</span></span>
-                  <span className="product-modal-price-value">{formatPrice(transfer)}</span>
+                  {hasCyber ? (
+                    <>
+                      <span className="cyber-badge">CYBER</span>
+                      <span className="product-modal-price-old">{formatPrice(transfer)}</span>
+                      <span className="product-modal-price-value">{formatPrice(product.cyberTransfer!)}</span>
+                      <span className="product-modal-price-label">Transferencia</span>
+                    </>
+                  ) : (
+                    <>
+                      <span className="product-modal-price-label">Transferencia · <span className="off-tag">20% off</span></span>
+                      <span className="product-modal-price-value">{formatPrice(transfer)}</span>
+                    </>
+                  )}
                 </div>
                 <div>
                   <span className="product-modal-price-label">Tarjeta</span>
@@ -264,6 +286,18 @@ const productFromPath = (path: string) => {
 
 export default function Catalog({ initialSlug }: { initialSlug?: string }) {
   const [cart, setCart] = useState<Record<string, number>>({});
+  const [cyberActive, setCyberActive] = useState(() => isCyberDateActive());
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const override = params.get("cyber");
+    if (override === "1") { setCyberActive(true); return; }
+    if (override === "0") { setCyberActive(false); return; }
+    const sync = () => setCyberActive(isCyberDateActive());
+    sync();
+    const id = window.setInterval(sync, 30000);
+    return () => window.clearInterval(id);
+  }, []);
   const [cartOpen, setCartOpen] = useState(false);
   const [need, setNeed] = useState("");
   const [brand, setBrand] = useState("");
@@ -416,7 +450,21 @@ export default function Catalog({ initialSlug }: { initialSlug?: string }) {
         </SheetContent>
       </Sheet>
 
-      <ProductModal product={modalProduct} open={modalOpen} onOpenChange={(o) => { if (!o) closeProduct(); }} onAdd={addToCart} />
+      <ProductModal product={modalProduct} cyberActive={cyberActive} open={modalOpen} onOpenChange={(o) => { if (!o) closeProduct(); }} onAdd={addToCart} />
+
+      {cyberActive && (
+        <section className="cyber-banner" aria-label="Promoción Cyber Skin Days">
+          <div className="cyber-banner-inner">
+            <span className="cyber-banner-tag">CYBER SKIN DAYS</span>
+            <p className="cyber-banner-title">HASTA 30% OFF</p>
+            <p className="cyber-banner-meta">
+              <span>PAGANDO POR TRANSFERENCIA</span>
+              <span className="cyber-banner-dot" aria-hidden="true">·</span>
+              <span>31/10 AL 06/11</span>
+            </p>
+          </div>
+        </section>
+      )}
 
       <section className="hero current-hero" id="inicio">
         <div className="hero-copy"><p className="kicker">SEORIN LAB</p><h1>Skincare coreano original.</h1><p className="hero-lead">Encontrá el producto ideal para tu piel.</p><div className="hero-actions"><a className="primary-button" href="#productos">Ver productos</a><a className="text-link" href="#segun-tu-piel">Comprar según mi piel</a></div></div>
@@ -430,7 +478,7 @@ export default function Catalog({ initialSlug }: { initialSlug?: string }) {
 
       <section className="featured-section">
         <div className="section-heading-row"><div><p className="kicker">Selección Seorin Lab</p><h2>Destacados para tu rutina</h2></div><a href="#productos">Ver todo el catálogo</a></div>
-        <div className="featured-grid">{featuredProducts.map((p) => <ProductCard key={p.name} product={p} onAdd={() => addToCart(p)} onOpen={() => openProduct(p)} />)}</div>
+        <div className="featured-grid">{featuredProducts.map((p) => <ProductCard key={p.name} product={p} cyberActive={cyberActive} onAdd={() => addToCart(p)} onOpen={() => openProduct(p)} />)}</div>
       </section>
 
 
@@ -440,7 +488,7 @@ export default function Catalog({ initialSlug }: { initialSlug?: string }) {
           <span>{filtered.length} productos{activeFilters > 0 && <> · {[type, need, brand].filter(Boolean).join(" · ")}</>}</span>
           {activeFilters > 0 ? <button type="button" onClick={clearFilters}>Limpiar filtros</button> : <button type="button" onClick={() => setFilterOpen(true)}>Filtrar</button>}
         </div>
-        <div className="current-catalog-grid">{filtered.map((p) => <ProductCard key={p.name} product={p} onAdd={() => addToCart(p)} onOpen={() => openProduct(p)} />)}</div>
+        <div className="current-catalog-grid">{filtered.map((p) => <ProductCard key={p.name} product={p} cyberActive={cyberActive} onAdd={() => addToCart(p)} onOpen={() => openProduct(p)} />)}</div>
         <div className="catalog-help"><a href={whatsappLink("Hola Seorin Lab. Necesito ayuda para elegir.")} target="_blank" rel="noreferrer">¿Necesitás ayuda para elegir?</a></div>
       </section>
 
