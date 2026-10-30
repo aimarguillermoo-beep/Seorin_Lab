@@ -1185,8 +1185,8 @@ footer { display: grid; grid-template-columns: 1.2fr .8fr; gap: 70px; padding: 7
   align-self: flex-start;
   padding: 2.5px 6px;
   border-radius: 4px;
-  background: var(--ink);
-  color: var(--paper);
+  background: #a85862;
+  color: #ffffff;
   font-size: 9px;
   font-weight: 800;
   letter-spacing: 0.11em;
