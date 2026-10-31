@@ -1,11 +1,12 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ArrowLeft, ArrowRight, Check, Menu, Share2, X } from "lucide-react";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { products, productPath, getProductBySlug, isCyberDateActive, type Product } from "./products";
+import { products, productPath, productSlug, getProductBySlug, isCyberDateActive, getEffectiveTransferPrice, type Product } from "./products";
+import { CONSENT_CHANGE_EVENT, openConsentPreferences, trackMetaStandardEvent } from "@/lib/meta-client";
 
 const whatsappNumber = "5491125578250";
 const formatPrice = (value: number) => new Intl.NumberFormat("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 0 }).format(value);
@@ -350,9 +351,37 @@ export default function Catalog({ initialSlug }: { initialSlug?: string }) {
     return () => window.removeEventListener("popstate", onPop);
   }, []);
 
+  const lastViewedSlugRef = useRef<string | null>(null);
   useEffect(() => {
     document.title = modalOpen && modalProduct ? `${modalProduct.name} | Seorin Lab` : SITE_TITLE;
-  }, [modalOpen, modalProduct]);
+    if (!modalOpen || !modalProduct) {
+      lastViewedSlugRef.current = null;
+      return;
+    }
+    const fireViewContent = () => {
+      const slug = productSlug(modalProduct);
+      if (lastViewedSlugRef.current === slug) return;
+      const effectivePrice = getEffectiveTransferPrice(modalProduct, cyberActive);
+      const sentId = trackMetaStandardEvent("ViewContent", {
+        currency: "ARS",
+        value: effectivePrice,
+        content_ids: [slug],
+        content_name: modalProduct.name,
+        content_category: modalProduct.brand,
+        content_type: "product",
+        contents: [{ id: slug, quantity: 1, item_price: effectivePrice }],
+      });
+      if (sentId) {
+        lastViewedSlugRef.current = slug;
+      }
+    };
+    fireViewContent();
+    const onConsent = (e: Event) => {
+      if ((e as CustomEvent<string>).detail === "granted") fireViewContent();
+    };
+    window.addEventListener(CONSENT_CHANGE_EVENT, onConsent);
+    return () => window.removeEventListener(CONSENT_CHANGE_EVENT, onConsent);
+  }, [modalOpen, modalProduct, cyberActive]);
 
   const filtered = useMemo(() => {
     const result = catalogProducts.filter((p) => {
@@ -368,7 +397,46 @@ export default function Catalog({ initialSlug }: { initialSlug?: string }) {
   const cartEntries = Object.entries(cart).map(([name, quantity]) => ({ product: getProduct(name), quantity })).filter((x) => x.product && x.quantity > 0);
   const cartCount = cartEntries.reduce((sum, x) => sum + x.quantity, 0);
   const cartTotal = cartEntries.reduce((sum, x) => sum + x.product.price * x.quantity, 0);
-  const addToCart = (p: Product) => { if (p.soldOut) return; setCart((c) => ({ ...c, [p.name]: (c[p.name] || 0) + 1 })); setCartOpen(true); };
+  const addToCart = (p: Product) => {
+    if (p.soldOut) return;
+    setCart((c) => ({ ...c, [p.name]: (c[p.name] || 0) + 1 }));
+    setCartOpen(true);
+    const slug = productSlug(p);
+    const effectivePrice = getEffectiveTransferPrice(p, cyberActive);
+    trackMetaStandardEvent("AddToCart", {
+      currency: "ARS",
+      value: effectivePrice,
+      content_ids: [slug],
+      content_name: p.name,
+      content_category: p.brand,
+      content_type: "product",
+      contents: [{ id: slug, quantity: 1, item_price: effectivePrice }],
+    });
+  };
+  const lastCheckoutTsRef = useRef<number>(0);
+  const handleInitiateCheckout = () => {
+    const now = Date.now();
+    if (now - lastCheckoutTsRef.current < 2000 || cartEntries.length === 0) return;
+    lastCheckoutTsRef.current = now;
+    const contents = cartEntries.map(({ product, quantity }) => ({
+      id: productSlug(product),
+      quantity,
+      item_price: getEffectiveTransferPrice(product, cyberActive),
+    }));
+    const dynamicTransferTotal = contents.reduce((sum, item) => sum + (item.item_price || 0) * item.quantity, 0);
+    trackMetaStandardEvent(
+      "InitiateCheckout",
+      {
+        currency: "ARS",
+        value: dynamicTransferTotal,
+        content_ids: contents.map((c) => c.id),
+        contents,
+        content_type: "product",
+        num_items: cartCount,
+      },
+      { immediate: true },
+    );
+  };
   const setQuantity = (name: string, q: number) => setCart((c) => { const n = { ...c }; if (q <= 0) delete n[name]; else n[name] = q; return n; });
   const orderLink = whatsappLink(["Hola Seorin Lab. Quiero hacer este pedido:", "", ...cartEntries.map(({product, quantity}) => `\u2022 ${quantity} x ${product.name}${product.preorder ? " (PREVENTA)" : ""} \u2014 ${formatPrice(product.price)} c/u`), "", `Total base: ${formatPrice(cartTotal)}`, "¿Me confirmás stock, pago y envío?"].join("\n"));
 
@@ -446,7 +514,7 @@ export default function Catalog({ initialSlug }: { initialSlug?: string }) {
         <SheetContent className="cart-sheet">
           <SheetHeader className="cart-header"><p className="kicker">Tu selección</p><SheetTitle>Carrito Seorin Lab</SheetTitle><SheetDescription>Revisá las cantidades y envianos el pedido por WhatsApp.</SheetDescription></SheetHeader>
           <div className="cart-body">{cartEntries.length === 0 ? <div className="cart-empty"><span>✣</span><p>Tu carrito está vacío.</p></div> : cartEntries.map(({product, quantity}) => <article className="cart-item" key={product.name}><img src={product.image} alt="" /><div><span>{product.brand}</span><strong>{product.name}</strong><p>{formatPrice(product.price)}</p><div className="quantity-control"><button onClick={() => setQuantity(product.name, quantity - 1)}>−</button><span>{quantity}</span><button onClick={() => setQuantity(product.name, quantity + 1)}>+</button></div></div></article>)}</div>
-          {cartEntries.length > 0 && <div className="cart-footer"><div className="cart-total"><span>Total base</span><strong>{formatPrice(cartTotal)}</strong></div><a href={orderLink} target="_blank" rel="noreferrer">Enviar pedido por WhatsApp <span>↗</span></a></div>}
+          {cartEntries.length > 0 && <div className="cart-footer"><div className="cart-total"><span>Total base</span><strong>{formatPrice(cartTotal)}</strong></div><a href={orderLink} target="_blank" rel="noreferrer" onClick={handleInitiateCheckout}>Enviar pedido por WhatsApp <span>↗</span></a></div>}
         </SheetContent>
       </Sheet>
 
@@ -497,7 +565,7 @@ export default function Catalog({ initialSlug }: { initialSlug?: string }) {
         <div><p className="kicker">Envíos a todo el país</p><h2>Coordinamos tu envío.</h2><p>Consultanos con tu localidad y código postal para conocer la modalidad, el costo y el plazo de entrega.</p><a className="text-link" href={whatsappLink("Hola Seorin Lab. Quiero consultar el envío a mi localidad.")} target="_blank" rel="noreferrer">Consultar mi envío ↗</a></div>
       </section>
 
-      <footer><div className="footer-brand"><div className="wordmark"><img className="brand-logo" src="/seorin-lab-emblem.webp" alt=""/><span>SEORIN LAB</span></div><p>Skincare original. Piel luminosa y saludable, con una rutina que tenga sentido para vos.</p></div><div className="footer-links"><div><span>WhatsApp</span><a href="https://wa.me/5491125578250" target="_blank" rel="noreferrer">+54 9 11 2557-8250</a></div><div><span>Instagram</span><a href="https://instagram.com/seorinlab.skincare" target="_blank" rel="noreferrer">@seorinlab.skincare</a></div><div><span>Email</span><a href="mailto:seorin_lab@outlook.com">seorin_lab@outlook.com</a></div></div><p className="legal">Las descripciones se refieren a beneficios cosméticos y no sustituyen diagnóstico ni tratamiento dermatológico. Precios expresados en pesos argentinos.</p></footer>
+      <footer><div className="footer-brand"><div className="wordmark"><img className="brand-logo" src="/seorin-lab-emblem.webp" alt=""/><span>SEORIN LAB</span></div><p>Skincare original. Piel luminosa y saludable, con una rutina que tenga sentido para vos.</p></div><div className="footer-links"><div><span>WhatsApp</span><a href="https://wa.me/5491125578250" target="_blank" rel="noreferrer">+54 9 11 2557-8250</a></div><div><span>Instagram</span><a href="https://instagram.com/seorinlab.skincare" target="_blank" rel="noreferrer">@seorinlab.skincare</a></div><div><span>Email</span><a href="mailto:seorin_lab@outlook.com">seorin_lab@outlook.com</a></div></div><p className="legal">Las descripciones se refieren a beneficios cosméticos y no sustituyen diagnóstico ni tratamiento dermatológico. Precios expresados en pesos argentinos. · <button type="button" onClick={openConsentPreferences} className="underline cursor-pointer bg-transparent border-0 p-0 text-inherit font-[inherit]">Preferencias de cookies</button></p></footer>
     </main>
   );
 }

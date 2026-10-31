@@ -471,3 +471,10 @@ export const CYBER_START_MS = Date.parse("2026-10-31T00:00:00-03:00");
 export const CYBER_END_MS = Date.parse("2026-11-06T23:59:59.999-03:00");
 export const isCyberDateActive = (nowMs: number = Date.now()) =>
   nowMs >= CYBER_START_MS && nowMs <= CYBER_END_MS;
+
+
+/** Obtiene el precio de transferencia vigente en ARS (incluyendo Cyber Skin Days cuando está activo). */
+export const getEffectiveTransferPrice = (p: Product, cyberActive: boolean = isCyberDateActive()): number => {
+  const baseTransfer = p.transfer || Math.round(p.price / 1.15);
+  return !p.soldOut && typeof p.cyberTransfer === "number" && cyberActive ? p.cyberTransfer : baseTransfer;
+};
